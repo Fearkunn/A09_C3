@@ -53,11 +53,6 @@
 			path = A09_C3Tests;
 			sourceTree = "<group>";
 		};
-		13150B67300635550096FDB2 /* A09_C3UITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = A09_C3UITests;
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,7 +85,6 @@
 			children = (
 				13150B4B300635550096FDB2 /* A09_C3 */,
 				13150B5D300635550096FDB2 /* A09_C3Tests */,
-				13150B67300635550096FDB2 /* A09_C3UITests */,
 				13150B4A300635550096FDB2 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -165,9 +159,6 @@
 			);
 			dependencies = (
 				13150B66300635550096FDB2 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				13150B67300635550096FDB2 /* A09_C3UITests */,
 			);
 			name = A09_C3UITests;
 			packageProductDependencies = (
