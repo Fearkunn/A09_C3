@@ -10,6 +10,7 @@ import Foundation
 
 @Model
 class Obat {
+    @Attribute(.unique) var id: UUID?
     var nama: String
     var jenis: JenisObat
     var dosis: String
@@ -18,8 +19,10 @@ class Obat {
     var isKondisional: Bool
     var kondisiDetail: String?  // optional, hanya terisi kalau isKondisional true
     var createdAt: Date
+    var updatedAt: Date
     
     init(
+        id: UUID = UUID(),
         nama: String,
         jenis: JenisObat,
         dosis: String,
@@ -27,7 +30,8 @@ class Obat {
         keterangan: KeteranganObat,
         isKondisional: Bool = false,
         kondisiDetail: String? = nil,
-        createdAt: Date = .now
+        createdAt: Date = .now,
+        updatedAt: Date = .now
     ) {
         self.nama = nama
         self.jenis = jenis
@@ -37,6 +41,7 @@ class Obat {
         self.isKondisional = isKondisional
         self.kondisiDetail = kondisiDetail
         self.createdAt = createdAt
+        self.updatedAt = updatedAt
     }
 }
 
