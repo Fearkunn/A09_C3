@@ -10,29 +10,30 @@ import Foundation
 
 @Model
 class Obat {
-    @Attribute(.unique) var id: UUID?
-    var nama: String
-    var jenis: JenisObat
-    var dosis: String
-    var frekuensi: String
-    var keterangan: KeteranganObat
-    var isKondisional: Bool
-    var kondisiDetail: String?  // optional, hanya terisi kalau isKondisional true
-    var createdAt: Date
-    var updatedAt: Date
+    var id: UUID = UUID()
+    var nama: String = ""
+    var jenis: JenisObat = JenisObat.tablet
+    var dosis: String = ""
+    var frekuensi: String = ""
+    var keterangan: KeteranganObat = KeteranganObat.sesudahMakan
+    var isKondisional: Bool = false
+    var kondisiDetail: String? = nil
+    var createdAt: Date = Date.now
+    var updatedAt: Date = Date.now
     
     init(
         id: UUID = UUID(),
-        nama: String,
-        jenis: JenisObat,
-        dosis: String,
-        frekuensi: String,
-        keterangan: KeteranganObat,
+        nama: String = "",
+        jenis: JenisObat = JenisObat.tablet,
+        dosis: String = "",
+        frekuensi: String = "",
+        keterangan: KeteranganObat = KeteranganObat.sesudahMakan,
         isKondisional: Bool = false,
         kondisiDetail: String? = nil,
-        createdAt: Date = .now,
-        updatedAt: Date = .now
+        createdAt: Date = Date.now,
+        updatedAt: Date = Date.now
     ) {
+        self.id = id
         self.nama = nama
         self.jenis = jenis
         self.dosis = dosis

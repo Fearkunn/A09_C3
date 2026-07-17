@@ -12,7 +12,8 @@ import SwiftData
 struct A09_C3App: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
-            Item.self,
+            PantauanModel.self,
+            Obat.self
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 

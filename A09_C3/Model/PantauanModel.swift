@@ -9,17 +9,17 @@ import SwiftData
 
 @Model
 final class PantauanModel {
-    @Attribute(.unique) var id: UUID
-    var pantauanDate: Date
-    var pantauanBody: String
-    var pantauanCreatedAt: Date
+    var id: UUID = UUID()
+    var pantauanDate: Date = Date.now
+    var pantauanBody: String = ""
+    var pantauanCreatedAt: Date = Date.now
     var pantauanUpdatedAt: Date?
     
-    init(pantauanDate: Date, pantauanBody: String) {
-        self.id = UUID()
+    init(
+        pantauanDate: Date = Date.now,
+        pantauanBody: String = ""
+    ) {
         self.pantauanDate = pantauanDate
         self.pantauanBody = pantauanBody
-        self.pantauanCreatedAt = .now
-        self.pantauanUpdatedAt = nil
     }
 }
