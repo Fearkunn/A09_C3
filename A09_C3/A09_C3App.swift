@@ -13,7 +13,8 @@ struct A09_C3App: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             PantauanModel.self,
-            Obat.self
+            Obat.self,
+            KonsulModel.self
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
