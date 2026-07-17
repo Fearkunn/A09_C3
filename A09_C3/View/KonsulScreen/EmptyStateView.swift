@@ -76,7 +76,7 @@ struct KonsulEmptyState: View {
             }
         }
         .sheet(isPresented: $showModal) {
-                    AddKonsul()
+//                    AddKonsul()
                 }
             
     }
