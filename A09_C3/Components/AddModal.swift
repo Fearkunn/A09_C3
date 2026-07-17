@@ -1,46 +1,65 @@
 //
-//  AddKonsul.swift
+//  AddModal.swift
 //  A09_C3
 //
 //  Created by Dina on 17/07/26.
 //
 
-
 import SwiftUI
 
-struct AddKonsul: View {
+struct AddModal<Content: View>: View {
     let title: String
     let onClose: () -> Void
     let onSave: () -> Void
+    @ViewBuilder let content: Content
 
     var body: some View {
-        HStack {
-            CircleIconButton(
-                systemName: "xmark",
-                iconColor: .black,
-                backgroundColor: Color("buttonCross").opacity(0.16),
-                action: onClose
-            )
+        VStack(spacing: 1) {
+            // Header
+            HStack {
+                CircleIconButton(
+                    systemName: "xmark",
+                    iconColor: .black,
+                    backgroundColor: Color("buttonCross").opacity(0.16),
+                    action: onClose
+                )
+
+                Spacer()
+
+                Text(title)
+                    .font(.system(size: 19, weight: .semibold))
+
+                Spacer()
+
+                CircleIconButton(
+                    systemName: "checkmark",
+                    iconColor: .white,
+                    backgroundColor: .cyan,
+                    action: onSave
+                )
+            }
+            .padding(.horizontal, 20)
+            .padding(.top, 20)
+
+            Form {
+                content
+            }
+            .scrollContentBackground(.hidden)
 
             Spacer()
-
-            Text(title)
-                .font(.system(size: 19, weight: .semibold))
-
-            Spacer()
-
-            CircleIconButton(
-                systemName: "checkmark",
-                iconColor: .white,
-                backgroundColor: .cyan,
-                action: onSave
-            )
         }
-        .padding(.horizontal, 20)
-        .padding(.top, 20)
+        .background(Color("backgroundColor"))
     }
 }
 
 #Preview {
-    AddKonsul(title: "Konsultasi Baru", onClose: {}, onSave: {})
+    AddModal(
+        title: "Konsultasi Baru",
+        onClose: {},
+        onSave: {}
+    ) {
+        Section {
+            
+        }
+    }
 }

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct AddKonsulScreen: View {
+struct AddKonsul: View {
     @Environment(\.dismiss) private var dismiss
     
     @State private var namaDokter: String = ""
@@ -50,6 +50,6 @@ struct AddKonsulScreen: View {
 
 
 #Preview {
-    AddKonsulScreen()
+    AddKonsul()
 }
 
