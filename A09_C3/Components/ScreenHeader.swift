@@ -18,21 +18,23 @@ struct ScreenHeader: View {
     }
     
     var body: some View {
-        HStack {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Spacer()
+                
+                Button(action: addAction) {
+                    Image(systemName: "plus")
+                        .font(.system(size: 22, weight: .bold))
+                        .foregroundColor(.white)
+                        .frame(width: 48, height: 48)
+                        .background(Circle().fill(.cyan))
+                }
+                .accessibilityLabel(Text(indonesianText("Tambah \(title)")))
+            }
+            
             Text(indonesianText(title))
                 .font(.largeTitle)
                 .fontWeight(.bold)
-            
-            Spacer()
-            
-            Button(action: addAction) {
-                Image(systemName: "plus")
-                    .font(.system(size: 22, weight: .bold))
-                    .foregroundColor(.white)
-                    .frame(width: 48, height: 48)
-                    .background(Circle().fill(.cyan))
-            }
-            .accessibilityLabel(Text(indonesianText("Tambah \(title)")))
         }
         .padding(.horizontal, 20)
     }
