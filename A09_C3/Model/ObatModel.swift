@@ -61,3 +61,10 @@ enum KeteranganObat: String, Codable, CaseIterable, Identifiable {
     
     var id: String { self.rawValue }
 }
+
+enum ObatTab: String, CaseIterable, Identifiable {
+    case rutin = "Rutin"
+    case kondisional = "Kondisional"
+
+    var id: String { rawValue }
+}
