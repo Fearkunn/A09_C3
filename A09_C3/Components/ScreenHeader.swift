@@ -37,3 +37,14 @@ struct ScreenHeader: View {
         .padding(.horizontal, 20)
     }
 }
+
+#Preview {
+    ZStack {
+        Color("backgroundColor")
+            .ignoresSafeArea()
+        VStack {
+            ScreenHeader(title: "Obat") {}
+            Spacer()
+        }
+    }
+}
