@@ -43,7 +43,7 @@ final class ObatAddViewModel {
         switch jenis {
         case .tablet: return "Tablet"
         case .kapsul: return "Kapsul"
-        case .sirup: return "ml"
+        case .sirup: return "Sendok"
         }
     }
 
