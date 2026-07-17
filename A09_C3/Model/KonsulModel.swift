@@ -11,15 +11,15 @@ import SwiftData
 @Model
 final class KonsulModel {
     var id: UUID = UUID()
-    var namaDokter: String
+    var namaDokter: String = ""
     var tanggalKonsultasi: Date = Date.now
-    var content: String
+    var content: String = ""
     var konsulCreatedAt: Date = Date.now
     var kosulUpdatedAt: Date?
 
     init(
-        namaDokter: String,
-        tanggalKonsultasi: Date = .now,
+        namaDokter: String = "",
+        tanggalKonsultasi: Date = Date.now,
         content: String = ""
     ) {
         self.namaDokter = namaDokter
