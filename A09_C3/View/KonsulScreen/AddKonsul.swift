@@ -9,27 +9,32 @@ import SwiftUI
 
 struct AddKonsul: View {
     @Environment(\.dismiss) private var dismiss
-    
-    @State private var namaDokter: String = ""
-    @State private var tanggalKonsultasi = Date()
-    @State private var content: String = ""
-    
+    @StateObject private var viewModel = AddKonsulViewModel()
+    @State private var showError = false
+//    
+//    @State private var namaDokter: String = ""
+//    @State private var tanggalKonsultasi = Date()
+//    @State private var content: String = ""
+//    
     var body: some View {
         AddModal(
             title: "Konsultasi Baru",
             onClose: { dismiss() },
             onSave: {
-                // TODO: simpan data konsultasi di sini
-                dismiss()
+                if viewModel.addKonsultasi() {
+                    dismiss()
+                } else {
+                    showError = true
+                }
             }
         ) {
             Section {
-                TextField(text: $namaDokter, prompt: Text("Nama Dokter")) {
+                TextField(text: $viewModel.namaDokter, prompt: Text("Nama Dokter")) {
                     Text("Nama")
                 }
                 DatePicker(
                     "Tanggal Konsultasi",
-                    selection: $tanggalKonsultasi,
+                    selection: $viewModel.tanggalKonsultasi,
                     displayedComponents: [.date]
                 )
                 .datePickerStyle(.compact)
@@ -38,7 +43,7 @@ struct AddKonsul: View {
             Section {
                 TextField(
                     "Content",
-                    text: $content,
+                    text: $viewModel.content,
                     prompt: Text("Ketik atau ketuk ikon mikrofon untuk berbicara"),
                     axis: .vertical
                 )
