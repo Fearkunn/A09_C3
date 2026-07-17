@@ -65,13 +65,8 @@ struct ObatListView: View {
                 }
             }
             .navigationBarHidden(true) // Menyembunyikan bar bawaan agar tidak double dengan header kustom kita
-<<<<<<< HEAD
-            .sheet(isPresented: $showAddSheet) {
-//                 ObatAddView()
-=======
             .fullScreenCover(isPresented: $showAddSheet) {
                 // ObatAddView()
->>>>>>> dev
             }
         }
     }

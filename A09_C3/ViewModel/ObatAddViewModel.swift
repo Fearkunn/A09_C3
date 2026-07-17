@@ -31,6 +31,10 @@ final class ObatAddViewModel {
     var jumlahPerKali: Int = 1       // sesuai satuan Jenis
     var activeChip: FrekuensiChip = .jumlahPerHari
 
+    // Wheel picker baru muncul setelah salah satu chip Frekuensi di-tap.
+    // Default false supaya saat halaman pertama dibuka, picker belum tampil.
+    var isPickerExpanded: Bool = false
+
     var showCancelAlert = false
     var attemptedSave = false
 
@@ -39,7 +43,7 @@ final class ObatAddViewModel {
         switch jenis {
         case .tablet: return "Tablet"
         case .kapsul: return "Kapsul"
-        case .sirup: return "Sendok"
+        case .sirup: return "ml"
         }
     }
 

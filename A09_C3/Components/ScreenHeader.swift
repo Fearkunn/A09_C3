@@ -34,14 +34,7 @@ struct ScreenHeader: View {
             }
             .accessibilityLabel(Text(indonesianText("Tambah \(title)")))
         }
-<<<<<<< HEAD:A09_C3/View/KonsulScreen/EmptyStateView.swift
-        .sheet(isPresented: $showModal) {
-                    AddKonsul()
-                }
-            
-=======
         .padding(.horizontal, 20)
->>>>>>> dev:A09_C3/Components/ScreenHeader.swift
     }
 }
 
