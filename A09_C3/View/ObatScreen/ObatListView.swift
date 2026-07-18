@@ -55,7 +55,7 @@ struct ObatListView: View {
                     } else {
                         List {
                             ForEach(filteredObat) { obat in
-                                // ObatRowView(obat: obat)
+                                 ObatRowView(obat: obat)
                             }
                             .onDelete(perform: deleteObat)
                         }
@@ -64,9 +64,9 @@ struct ObatListView: View {
                     }
                 }
             }
-            .navigationBarHidden(true) // Menyembunyikan bar bawaan agar tidak double dengan header kustom kita
+            
             .fullScreenCover(isPresented: $showAddSheet) {
-                // ObatAddView()
+                 ObatAddView()
             }
         }
     }

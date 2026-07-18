@@ -27,7 +27,7 @@ final class ObatAddViewModel {
     var kondisiDetail: String = ""
 
     // Frekuensi sekarang berupa 2 chip + wheel picker angka
-    var jumlahPerHari: Int = 3       // "kali sehari"
+    var jumlahPerHari: Int = 1       // "kali sehari"
     var jumlahPerKali: Int = 1       // sesuai satuan Jenis
     var activeChip: FrekuensiChip = .jumlahPerHari
 
