@@ -12,15 +12,51 @@ import Foundation
 @Observable
 final class PantauanViewModel {
     private let modelContext: ModelContext
-
+    
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
     }
-
-    func add(date: Date, body: String) throws {}
-    func update(_ pantauan: PantauanModel, date: Date, body: String) throws {}
-    func delete(_ pantauan: PantauanModel) {}
-    func fetchAll() -> [PantauanModel] {return true ? [] : []}
+    
+    func add(date: Date, body: String) throws {
+        let trimmedBody = body.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        guard !trimmedBody.isEmpty else {
+            throw PantauanValidationError.emptyBody
+        }
+        
+        let pantauan = PantauanModel(
+            pantauanDate: date,
+            pantauanBody: trimmedBody
+        )
+        modelContext.insert(pantauan)
+        try modelContext.save()
+    }
+    
+    func update(_ pantauan: PantauanModel, date: Date, body: String) throws {
+        let trimmedBody = body.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        guard !trimmedBody.isEmpty else {
+            throw PantauanValidationError.emptyBody
+        }
+        
+        pantauan.pantauanDate = date
+        pantauan.pantauanBody = trimmedBody
+        pantauan.pantauanUpdatedAt = .now
+        
+        try modelContext.save()
+    }
+    
+    func delete(_ pantauan: PantauanModel) {
+        modelContext.delete(pantauan)
+        try? modelContext.save()
+    }
+    
+    func fetchAll() -> [PantauanModel] {
+        let descriptor = FetchDescriptor<PantauanModel>(
+            sortBy: [SortDescriptor(\.pantauanDate, order: .reverse)]
+        )
+        return (try? modelContext.fetch(descriptor)) ?? []
+    }
 }
 
 enum PantauanValidationError: Error, Equatable {
