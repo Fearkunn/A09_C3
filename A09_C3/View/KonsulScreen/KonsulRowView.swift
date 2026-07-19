@@ -12,8 +12,7 @@ struct KonsulRowView: View {
     
     var body: some View {
         NavigationLink {
-            Text("Detail \(konsul.namaDokter)")
-            //harusnya push ke detail view
+            KonsulDetailView(konsultasi: konsul)
         } label: {
             VStack(alignment: .leading) {
                 Text(konsul.namaDokter)
