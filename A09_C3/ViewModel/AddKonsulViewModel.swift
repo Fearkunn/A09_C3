@@ -6,17 +6,15 @@
 //
 
 import Foundation
+import SwiftData
 import Combine
-
 
 class AddKonsulViewModel: ObservableObject {
     @Published var namaDokter: String = ""
     @Published var tanggalKonsultasi: Date = Date()
     @Published var content: String = ""
     
-    @Published private(set) var daftarKonsultasi: [KonsulModel] = []
-    
-    func addKonsultasi() -> Bool {
+    func addKonsultasi(context: ModelContext) -> Bool {
         //validasi
         if namaDokter.isEmpty || content.isEmpty {
             return false
@@ -26,7 +24,7 @@ class AddKonsulViewModel: ObservableObject {
             tanggalKonsultasi: tanggalKonsultasi,
             content: content
         )
-        daftarKonsultasi.append(konsultasi)
+        context.insert(konsultasi)
         return true
     }
 }
