@@ -10,7 +10,7 @@ import SwiftData
 import Observation
 
 // MARK: - Frekuensi chip yang sedang aktif (menentukan wheel picker mana yang tampil)
-enum FrekuensiChip {
+enum FrekuensiChip: Equatable {
     case jumlahPerHari   // "3 kali sehari"
     case jumlahPerKali   // "1 Tablet" / "1 Kapsul" / "1 ml"
 }
