@@ -1,43 +1,64 @@
-//
-//  KonsulView.swift
-//  A09_C3
-//
-//  Created by Richie Daryl Kwenandar on 17/07/26.
-//
-
 import SwiftUI
 import SwiftData
 
 struct KonsulListView: View {
-
     @Environment(\.modelContext) private var modelContext
-    @Query(sort: \KonsulModel.tanggalKonsultasi, order: .reverse) private var allKonsul: [KonsulModel]
-
+    @Query(sort: \KonsulModel.tanggalKonsultasi, order: .reverse)
+    private var allKonsul: [KonsulModel]
+    
     @State private var showAddSheet = false
-
+    
+    //grup berdasarkan bulan
+    private var groupedKonsul: [(key: String, items: [KonsulModel])] {
+        let grouped = Dictionary(grouping: allKonsul) { konsul in
+            konsul.tanggalKonsultasi.formatted(.dateTime.month(.wide).year()
+                .locale(Locale(identifier: "id_ID")))
+            
+        }
+        //berdasarkan tanggal paling baru
+        return grouped.sorted { lhs, rhs in
+            guard let lhsDate = lhs.value.first?.tanggalKonsultasi,
+                  let rhsDate = rhs.value.first?.tanggalKonsultasi else {
+                return false
+            }
+            return lhsDate > rhsDate
+        }.map { (key: $0.key, items: $0.value) }
+    }
+    
     var body: some View {
         NavigationStack {
             ZStack {
                 Color("backgroundColor")
                     .ignoresSafeArea()
-
+                
                 VStack(spacing: 16) {
                     ScreenHeader(title: "Konsultasi") {
                         showAddSheet = true
                     }
-
+                    
                     if allKonsul.isEmpty {
                         Spacer()
                         EmptyStateView()
                         Spacer()
                     } else {
                         List {
-                            ForEach(allKonsul) { konsul in
-                                // KonsulRowView(konsul: konsul)
+                            ForEach(groupedKonsul, id: \.key) { group in
+                                Section {
+                                    ForEach(group.items) { konsul in
+                                        KonsulRowView(konsul: konsul)
+                                    }
+                                    .onDelete { offsets in
+                                        deleteKonsul(items: group.items, at: offsets)
+                                    }
+                                } header: {
+                                    Text(group.key)
+                                        .font(.subheadline)
+                                        .fontWeight(.semibold)
+                                        .foregroundColor(.secondary)
+                                }
                             }
-                            .onDelete(perform: deleteKonsul)
                         }
-                        .listStyle(.plain)
+                        .listStyle(.insetGrouped)
                         .scrollContentBackground(.hidden)
                     }
                 }
@@ -49,10 +70,10 @@ struct KonsulListView: View {
             }
         }
     }
-
-    private func deleteKonsul(at offsets: IndexSet) {
+    
+    private func deleteKonsul(items: [KonsulModel], at offsets: IndexSet) {
         for index in offsets {
-            modelContext.delete(allKonsul[index])
+            modelContext.delete(items[index])
         }
     }
 }

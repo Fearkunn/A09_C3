@@ -6,22 +6,20 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct AddKonsul: View {
+    @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     @StateObject private var viewModel = AddKonsulViewModel()
     @State private var showError = false
-//    
-//    @State private var namaDokter: String = ""
-//    @State private var tanggalKonsultasi = Date()
-//    @State private var content: String = ""
-//    
+    
     var body: some View {
         AddModal(
             title: "Konsultasi Baru",
             onClose: { dismiss() },
             onSave: {
-                if viewModel.addKonsultasi() {
+                if viewModel.addKonsultasi(context: modelContext) {
                     dismiss()
                 } else {
                     showError = true
@@ -38,6 +36,7 @@ struct AddKonsul: View {
                     displayedComponents: [.date]
                 )
                 .datePickerStyle(.compact)
+                .environment(\.locale, Locale(identifier: "id_ID")) //memaksa jadi bahasa indo
             }
             
             Section {
