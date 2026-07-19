@@ -1,0 +1,57 @@
+//
+//  DictationButton.swift
+//  A09_C3
+//
+//  Created by Richie Daryl Kwenandar on 19/07/26.
+//
+
+import SwiftUI
+
+struct DictationButton: View {
+    @Bindable var dictationManager: DictationManager
+    @Binding var text: String
+    var onError: ((String) -> Void)? = nil
+    
+    @State private var baseText: String = ""
+    
+    var body: some View {
+        CircleIconButton(
+            systemName: dictationManager.isRecording ? "stop.fill" : "mic.fill",
+            iconColor: dictationManager.isRecording ? .white : .black,
+            backgroundColor: dictationManager.isRecording ? .red : Color.gray.opacity(0.16),
+            size: 36,
+            iconSize: 16,
+            action: {
+                Task { await toggleDictation() }
+            }
+        )
+        .buttonStyle(.borderless)
+        .accessibilityLabel(dictationManager.isRecording ? "Hentikan dikte" : "Mulai dikte")
+        .onChange(of: dictationManager.transcribedText) { _, newValue in
+            guard dictationManager.isRecording else { return }
+            text = dictationManager.appendTranscription(existingText: baseText, newText: newValue)
+        }
+    }
+    
+    private func toggleDictation() async {
+        if dictationManager.isRecording {
+            dictationManager.stopRecording()
+        } else {
+            baseText = text
+            let granted = await dictationManager.requestAuthorization()
+            guard granted else {
+                onError?("Izin mikrofon/dikte belum diberikan")
+                return
+            }
+            try? dictationManager.startRecording()
+        }
+    }
+}
+
+#Preview {
+    @Previewable @State var text = ""
+    @Previewable @State var manager = DictationManager()
+    
+    DictationButton(dictationManager: manager, text: $text)
+        .padding()
+}
