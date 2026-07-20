@@ -17,8 +17,8 @@ struct DictationButton: View {
     var body: some View {
         CircleIconButton(
             systemName: dictationManager.isRecording ? "stop.fill" : "mic.fill",
-            iconColor: dictationManager.isRecording ? .white : .black,
-            backgroundColor: dictationManager.isRecording ? .red : Color.gray.opacity(0.16),
+            iconColor: dictationManager.isRecording ? .white : .primary,
+            backgroundColor: dictationManager.isRecording ? .red : Color(.tertiarySystemFill),
             size: 36,
             iconSize: 16,
             action: {

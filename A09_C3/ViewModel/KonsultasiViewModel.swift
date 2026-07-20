@@ -1,5 +1,5 @@
 //
-//  AddKonsulViewModel.swift
+//  KonsultasiViewModel.swift
 //  A09_C3
 //
 //  Created by Dina on 17/07/26.
@@ -13,7 +13,7 @@ enum KonsultasiValidationError: Error {
     case emptyBody
 }
 
-class AddKonsulViewModel {
+class KonsultasiViewModel {
     private let modelContext: ModelContext
     init(modelContext: ModelContext) {
         self.modelContext = modelContext

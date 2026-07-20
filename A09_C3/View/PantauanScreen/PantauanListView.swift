@@ -16,7 +16,6 @@ struct PantauanListView: View {
     @State private var showAddSheet = false
     @State private var pantauanToDelete: PantauanModel?
     @State private var showDeleteAlert = false
-    @State private var selectedPantauan: PantauanModel?
     
     private var viewModel: PantauanViewModel {
         PantauanViewModel(modelContext: modelContext)
@@ -57,36 +56,31 @@ struct PantauanListView: View {
                     EmptyStateView()
                 } else {
                     VStack(spacing: 0) {
-                        Spacer().frame(height: 140) // sesuaikan dengan tinggi ScreenHeader
+                        Spacer().frame(height: 110) // sesuaikan dengan tinggi ScreenHeader
                         List {
                             ForEach(groupedPantauan, id: \.month) { group in
-                                Section(group.month) {
+                                Section {
                                     ForEach(group.items) { pantauan in
-                                        Button {
-                                            selectedPantauan = pantauan
-                                        } label: {
-                                            PantauanRowView(pantauan: pantauan)
-                                        }
-                                        .buttonStyle(.plain)
-                                        .padding(.horizontal, 20)
-                                        .padding(.vertical, 4)
-                                        .listRowInsets(EdgeInsets())
-                                        .listRowSeparator(.hidden)
-                                        .listRowBackground(Color.clear)
-                                        .swipeActions {
-                                            Button(role: .destructive) {
-                                                pantauanToDelete = pantauan
-                                                showDeleteAlert = true
-                                            } label: {
-                                                Label("Hapus", systemImage: "trash")
+                                        PantauanRowView(pantauan: pantauan)
+                                            .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                                                Button {
+                                                    pantauanToDelete = pantauan
+                                                    showDeleteAlert = true
+                                                } label: {
+                                                    Label("Hapus", systemImage: "trash")
+                                                }
+                                                .tint(.red)
                                             }
-                                            .tint(.red)
-                                        }
                                     }
+                                } header: {
+                                    Text(group.month)
+                                        .font(.subheadline)
+                                        .fontWeight(.semibold)
+                                        .foregroundColor(.secondary)
                                 }
                             }
                         }
-                        .listStyle(.plain)
+                        .listStyle(.insetGrouped)
                         .scrollContentBackground(.hidden)
                     }
                 }
@@ -95,9 +89,6 @@ struct PantauanListView: View {
             .fullScreenCover(isPresented: $showAddSheet) {
                 AddPantauan()
                     .interactiveDismissDisabled()
-            }
-            .navigationDestination(item: $selectedPantauan) { pantauan in
-                PantauanDetailView(pantauan: pantauan)
             }
             .alert("Hapus Pantauan?", isPresented: $showDeleteAlert, presenting: pantauanToDelete) { pantauan in
                 Button("Tidak", role: .cancel) {}

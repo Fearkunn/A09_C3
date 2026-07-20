@@ -11,18 +11,18 @@ import SwiftData
 @testable import A09_C3
 
 @Suite("AddKonsul ViewModel Test")
-struct AddKonsulViewModelTests {
+struct KonsultasiViewModelTests {
     
     private let container: ModelContainer
     private let context: ModelContext
-    private let vm: AddKonsulViewModel
+    private let vm: KonsultasiViewModel
     
     init() throws {
         let schema = Schema([KonsulModel.self])
         let config = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
         container = try ModelContainer(for: schema, configurations: [config])
         context = ModelContext(container)
-        vm = AddKonsulViewModel(modelContext: context)
+        vm = KonsultasiViewModel(modelContext: context)
     }
     @Test("Berhasil membuat konsultasi jika semua field valid")
     func createKonsultasi_berhasil() throws {
