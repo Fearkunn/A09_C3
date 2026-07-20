@@ -43,7 +43,7 @@ struct AddKonsul: View {
                     Text("Nama")
                 }
                 DatePicker(
-                    "Tanggal Konsultasi",
+                    "Tanggal konsultasi",
                     selection: $tanggalKonsultasi,
                     displayedComponents: [.date]
                 )
