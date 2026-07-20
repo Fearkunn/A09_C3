@@ -13,7 +13,6 @@ struct AddKonsul: View {
     @Environment(\.dismiss) private var dismiss
     var konsultasiToEdit: KonsulModel?
     
-    //    @StateObject private var viewModel = AddKonsulViewModel()
     @State private var namaDokter: String = ""
     @State private var tanggalKonsultasi: Date = .now
     @State private var content: String = ""
@@ -105,7 +104,7 @@ private func handleClose() {
 
 
 private func save() {
-    let viewModel = AddKonsulViewModel(modelContext: modelContext)
+    let viewModel = KonsultasiViewModel(modelContext: modelContext)
     
     do {
         if let konsultasiToEdit {
