@@ -39,11 +39,12 @@ struct AddPantauan: View {
         ) {
             Section {
                 DatePicker(
-                    "Tanggal Pantauan",
+                    "Tanggal pantauan",
                     selection: $pantauanDate,
                     displayedComponents: [.date]
                 )
                 .datePickerStyle(.compact)
+                .environment(\.locale, Locale(identifier: "id_ID"))
             }
             
             Section {
