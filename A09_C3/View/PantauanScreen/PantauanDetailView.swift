@@ -32,8 +32,8 @@ struct PantauanDetailView: View {
                 HStack {
                     CircleIconButton(
                         systemName: "chevron.left",
-                        iconColor: .black,
-                        backgroundColor: Color.gray.opacity(0.16),
+                        iconColor: .primary,
+                        backgroundColor: Color(.tertiarySystemFill),
                         action: { dismiss() }
                     )
                     
@@ -41,7 +41,7 @@ struct PantauanDetailView: View {
                     
                     CircleIconButton(
                         systemName: "pencil",
-                        iconColor: .white,
+                        iconColor: .primary,
                         backgroundColor: .cyan,
                         action: { showEditSheet = true }
                     )
@@ -58,13 +58,13 @@ struct PantauanDetailView: View {
                         Text(formattedDate)
                     }
                     .padding()
-                    .background(.white)
+                    .background(Color(.secondarySystemBackground))
                     .clipShape(RoundedRectangle(cornerRadius: 12))
                     
                     Text(pantauan.pantauanBody)
                         .padding()
                         .frame(maxWidth: .infinity, minHeight: 200, alignment: .topLeading)
-                        .background(.white)
+                        .background(Color(.secondarySystemBackground))
                         .clipShape(RoundedRectangle(cornerRadius: 12))
                     
                     Spacer()
