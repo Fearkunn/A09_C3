@@ -6,7 +6,13 @@ struct KonsulListView: View {
     @Query(sort: \KonsulModel.tanggalKonsultasi, order: .reverse)
     private var allKonsul: [KonsulModel]
     
+    @State private var konsultasiToDelete: KonsulModel?
     @State private var showAddSheet = false
+    @State private var showDeleteAlert = false
+    
+    private var konsulViewModel: KonsultasiViewModel {
+        KonsultasiViewModel(modelContext: modelContext)
+    }
     
     //grup berdasarkan bulan
     private var groupedKonsul: [(key: String, items: [KonsulModel])] {
@@ -46,9 +52,15 @@ struct KonsulListView: View {
                                 Section {
                                     ForEach(group.items) { konsul in
                                         KonsulRowView(konsul: konsul)
-                                    }
-                                    .onDelete { offsets in
-                                        deleteKonsul(items: group.items, at: offsets)
+                                            .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                                                Button {
+                                                    konsultasiToDelete = konsul
+                                                    showDeleteAlert = true
+                                                } label: {
+                                                    Label("Hapus", systemImage: "trash")
+                                                }
+                                                .tint(.red)
+                                            }
                                     }
                                 } header: {
                                     Text(group.key)
@@ -68,12 +80,14 @@ struct KonsulListView: View {
                 AddKonsul()
                     .interactiveDismissDisabled()
             }
-        }
-    }
-    
-    private func deleteKonsul(items: [KonsulModel], at offsets: IndexSet) {
-        for index in offsets {
-            modelContext.delete(items[index])
+            .alert("Hapus Konsultasi?", isPresented: $showDeleteAlert, presenting: konsultasiToDelete) { konsultasi in
+                Button("Tidak", role: .cancel) {}
+                Button("Hapus", role: .destructive) {
+                    konsulViewModel.delete(konsultasi)
+                }
+            } message: { _ in
+                Text("Apakah Anda yakin ingin menghapus konsultasi ini?")
+            }
         }
     }
 }

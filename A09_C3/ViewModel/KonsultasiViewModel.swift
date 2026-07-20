@@ -47,14 +47,14 @@ class KonsultasiViewModel {
         konsultasi.content = content
     }
     
-    func fetchAll() -> [PantauanModel] {
-        let descriptor = FetchDescriptor<PantauanModel>(
-            sortBy: [SortDescriptor(\.pantauanDate, order: .reverse)]
+    func fetchAll() -> [KonsulModel] {
+        let descriptor = FetchDescriptor<KonsulModel>(
+            sortBy: [SortDescriptor(\.tanggalKonsultasi, order: .reverse)]
         )
         return (try? modelContext.fetch(descriptor)) ?? []
     }
     
-    func delete(_ pantauan: PantauanModel) {
+    func delete(_ pantauan: KonsulModel) {
         modelContext.delete(pantauan)
         try? modelContext.save()
     }
