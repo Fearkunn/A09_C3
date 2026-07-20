@@ -58,7 +58,7 @@ struct KonsulDetailView: View {
                         Text(konsultasi.namaDokter)
                     }
                     .padding()
-                    .background(.white)
+                    .background(Color(.secondarySystemGroupedBackground))
                     .clipShape(RoundedRectangle(cornerRadius: 12))
  
                     HStack {
@@ -68,13 +68,13 @@ struct KonsulDetailView: View {
                         Text(formattedDate)
                     }
                     .padding()
-                    .background(.white)
+                    .background(Color(.secondarySystemGroupedBackground))
                     .clipShape(RoundedRectangle(cornerRadius: 12))
  
                     Text(konsultasi.content)
                         .padding()
                         .frame(maxWidth: .infinity, minHeight: 200, alignment: .topLeading)
-                        .background(.white)
+                        .background(Color(.secondarySystemGroupedBackground))
                         .clipShape(RoundedRectangle(cornerRadius: 12))
  
                     Spacer()
