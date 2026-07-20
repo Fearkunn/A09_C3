@@ -19,7 +19,7 @@ struct AddModal<Content: View>: View {
             HStack {
                 CircleIconButton(
                     systemName: "xmark",
-                    iconColor: .black,
+                    iconColor: .primary,
                     backgroundColor: Color("buttonCross").opacity(0.16),
                     action: onClose
                 )
@@ -33,7 +33,7 @@ struct AddModal<Content: View>: View {
 
                 CircleIconButton(
                     systemName: "checkmark",
-                    iconColor: .white,
+                    iconColor: .primary,
                     backgroundColor: .cyan,
                     action: onSave
                 )

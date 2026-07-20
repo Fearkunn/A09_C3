@@ -32,13 +32,13 @@ struct CircleIconButton: View {
     HStack {
         CircleIconButton(
             systemName: "xmark",
-            iconColor: .black,
+            iconColor: .primary,
             backgroundColor: Color.gray.opacity(0.16),
             action: {}
         )
         CircleIconButton(
             systemName: "checkmark",
-            iconColor: .white,
+            iconColor: .primary,
             backgroundColor: .cyan,
             action: {}
         )

@@ -106,7 +106,7 @@ struct AddPantauan: View {
             }
             dismiss()
         } catch PantauanValidationError.emptyBody {
-            errorMessage = "Catatan tidak boleh kosong"
+            errorMessage = "Masukkan data terlebih dahulu untuk menyimpan"
         } catch {
             errorMessage = "Terjadi kesalahan, coba lagi"
         }
