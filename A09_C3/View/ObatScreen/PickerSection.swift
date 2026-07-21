@@ -21,8 +21,7 @@ struct PickerSection: View {
                 isSelected: viewModel.activeChip == .jumlahPerHari && viewModel.isPickerExpanded
             ) {
                 withAnimation {
-                    viewModel.activeChip = .jumlahPerHari
-                    viewModel.isPickerExpanded = true
+                    viewModel.selectFrekuensiChip(.jumlahPerHari)
                 }
             }
             FrekuensiChipButton(
@@ -30,8 +29,7 @@ struct PickerSection: View {
                 isSelected: viewModel.activeChip == .jumlahPerKali && viewModel.isPickerExpanded
             ) {
                 withAnimation {
-                    viewModel.activeChip = .jumlahPerKali
-                    viewModel.isPickerExpanded = true
+                    viewModel.selectFrekuensiChip(.jumlahPerKali)
                 }
             }
         }
