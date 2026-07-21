@@ -33,6 +33,7 @@ struct ObatListView: View {
                     ScreenHeader(title: "Obat") {
                         showAddSheet = true
                     }
+      
 
                     Picker("Filter Obat", selection: $selectedTab) {
                         ForEach(ObatTab.allCases) { tab in
@@ -42,10 +43,11 @@ struct ObatListView: View {
                     }
                     .pickerStyle(.segmented)
                     .padding(.horizontal)
+                    Spacer()
 
                     if filteredObat.isEmpty {
+                        EmptyStateView(message: "Ketuk tombol tambah untuk menambah obat")
                         Spacer()
-                        EmptyStateView()
                         Spacer()
                     } else {
                         List {
