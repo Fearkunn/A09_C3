@@ -52,6 +52,7 @@ struct ExpandableDatePicker: View {
             .datePickerStyle(.graphical)
             .environment(\.locale, Locale(identifier: "id_ID"))
             .labelsHidden()
+            .tint(.cyan)
             .transition(.opacity.combined(with: .move(edge: .top)))
         }
     }

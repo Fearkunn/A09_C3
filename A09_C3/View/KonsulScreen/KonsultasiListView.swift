@@ -49,7 +49,7 @@ struct KonsulListView: View {
                     EmptyStateView(message: "Ketuk tombol tambah untuk mencatat konsultasi")
                 } else {
                     VStack(spacing: 0) {
-                        Spacer().frame(height: 110)
+                        Spacer().frame(height: 50)
                         List {
                             ForEach(groupedKonsul, id: \.key) { group in
                                 Section {
