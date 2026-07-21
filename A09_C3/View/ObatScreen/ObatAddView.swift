@@ -45,13 +45,22 @@ struct ObatAddView: View {
                 HStack {
                     Text("Dosis")
                     Spacer()
-                    TextField("Tambah dosis", text: $viewModel.dosis)
+                    TextField("100", text: $viewModel.dosis)
                         .keyboardType(.numberPad)
                         .onChange(of: viewModel.dosis) { _, newValue in
-                                viewModel.dosis = newValue.filter(\.isNumber)
-                            }
+                            viewModel.updateDosis(newValue)
+                        }
                         .multilineTextAlignment(.trailing)
                         .foregroundStyle(.secondary)
+
+                    Text(viewModel.satuanDosis)
+                        .foregroundStyle(.secondary)
+                }
+                
+                if viewModel.attemptedSave && viewModel.dosis.trimmingCharacters(in: .whitespaces).isEmpty {
+                    Text("Dosis wajib diisi")
+                        .font(.caption)
+                        .foregroundStyle(.red)
                 }
 
                 Picker("Keterangan", selection: $viewModel.keterangan) {
@@ -60,11 +69,6 @@ struct ObatAddView: View {
                     }
                 }
 
-                if viewModel.attemptedSave && viewModel.dosis.trimmingCharacters(in: .whitespaces).isEmpty {
-                    Text("Dosis wajib diisi")
-                        .font(.caption)
-                        .foregroundStyle(.red)
-                }
                 // AC: If an Obat is conditional, user can toggle Kondisional to enable
                 Picker("Jenis Jadwal", selection: $viewModel.jenisJadwal) {
                     ForEach(ObatTab.allCases) { jenis in

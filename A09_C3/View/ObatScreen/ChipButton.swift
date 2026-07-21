@@ -17,12 +17,12 @@ struct FrekuensiChipButton: View {
         Button(action: action) {
             Text(title)
                 .font(.subheadline)
-                .foregroundStyle(isSelected ? .blue : .primary)
+                .foregroundStyle(isSelected ? .cyan : .primary)
                 .padding(.horizontal, 12)
                 .padding(.vertical, 6)
                 .background(
                     Capsule()
-                        .fill(isSelected ? Color.blue.opacity(0.15) : Color(.systemGray5))
+                        .fill(isSelected ? Color(.systemGray5) : Color(.systemGray5))
                 )
         }
         .buttonStyle(.plain)

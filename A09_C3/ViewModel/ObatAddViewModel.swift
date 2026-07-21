@@ -51,6 +51,14 @@ final class ObatAddViewModel {
         case .sirup: return "Sendok"
         }
     }
+    
+    // Satuan dosis, menyesuaikan Jenis obat yang dipilih
+    var satuanDosis: String {
+        switch jenis {
+        case .tablet, .kapsul: return "mg"
+        case .sirup: return "ml"
+        }
+    }
 
     // Gabungan nilai Frekuensi yang akan disimpan ke model (field `frekuensi: String`)
     var frekuensiText: String {
@@ -60,15 +68,18 @@ final class ObatAddViewModel {
     // MARK: - Validation
     // AC: User can save the Obat note only when all required information has been provided
     var isFormValid: Bool {
+        let trimmedDosis = dosis.trimmingCharacters(in: .whitespaces)
+
         let baseValid = !nama.trimmingCharacters(in: .whitespaces).isEmpty
-            && !dosis.trimmingCharacters(in: .whitespaces).isEmpty
+            && !trimmedDosis.isEmpty
+            && (Int(trimmedDosis) ?? 0) > 0
             && jumlahPerHari > 0
             && jumlahPerKali > 0
 
-        // AC: If Kondisional toggle is enabled, condition detail is required too
         if isKondisional {
             return baseValid && !kondisiDetail.trimmingCharacters(in: .whitespaces).isEmpty
         }
+
         return baseValid
     }
 
@@ -81,7 +92,29 @@ final class ObatAddViewModel {
     }
 
     // MARK: - Actions
+    
 
+    // AC: User can only input numeric value for Dosis, angka "0" dianggap kosong
+    func updateDosis(_ newValue: String) {
+        let filtered = newValue.filter(\.isNumber)
+        if let value = Int(filtered), value == 0 {
+            dosis = ""
+        } else {
+            dosis = filtered
+        }
+    }
+
+    //Frekuensi Picker Actions
+    func selectFrekuensiChip(_ chip: FrekuensiChip) {
+        if activeChip == chip && isPickerExpanded {
+            // Chip yang sama di-tap lagi saat picker sedang terbuka -> tutup
+            isPickerExpanded = false
+        } else {
+            // Chip berbeda, atau picker belum terbuka -> buka & pindah ke chip ini
+            activeChip = chip
+            isPickerExpanded = true
+        }
+    }
     /// AC: User can cancel note creation without saving any changes
     func handleClose(dismiss: () -> Void) {
         if hasUnsavedChanges {
