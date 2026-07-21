@@ -46,13 +46,7 @@ struct AddPantauan: View {
             onSave: { save() }
         ) {
             Section {
-                DatePicker(
-                    "Tanggal pantauan",
-                    selection: $pantauanDate,
-                    displayedComponents: [.date]
-                )
-                .datePickerStyle(.compact)
-                .environment(\.locale, Locale(identifier: "id_ID"))
+                ExpandableDatePicker(label: "Tanggal pantauan", selection: $pantauanDate)
             }
             
             Section {
