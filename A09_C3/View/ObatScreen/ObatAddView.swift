@@ -14,6 +14,7 @@ struct ObatAddView: View {
     @Environment(\.dismiss) private var dismiss
 
     @State private var viewModel = ObatAddViewModel()
+    @State private var selectedTab: ObatTab = .rutin
 
     var body: some View {
         AddModal(
@@ -65,11 +66,19 @@ struct ObatAddView: View {
                         .foregroundStyle(.red)
                 }
                 // AC: If an Obat is conditional, user can toggle Kondisional to enable
-                Toggle("Kondisional", isOn: $viewModel.isKondisional.animation())
+                Picker("Jenis Jadwal", selection: $viewModel.jenisJadwal) {
+                    ForEach(ObatTab.allCases) { jenis in
+                        Text(jenis.rawValue)
+                            .tag(jenis)
+                    }
+                }
+                .pickerStyle(.segmented)
+                .animation(.default, value: viewModel.jenisJadwal)
 
-                // AC: If Kondisional toggle is enabled, user can type the condition details
+                // AC: If Kondisional dipilih, user bisa isi detail kondisi
                 if viewModel.isKondisional {
                     TextField("Detail kondisi (cth: saat demam)", text: $viewModel.kondisiDetail)
+
                     if viewModel.attemptedSave && viewModel.kondisiDetail.trimmingCharacters(in: .whitespaces).isEmpty {
                         Text("Detail kondisi wajib diisi")
                             .font(.caption)
