@@ -53,7 +53,7 @@ struct PantauanListView: View {
                 
                 // Layer 2: Konten, independen — empty state center dari SELURUH layar
                 if allPantauan.isEmpty {
-                    EmptyStateView()
+                    EmptyStateView(message: "Ketuk tombol tambah untuk mencatat pantauan")
                 } else {
                     VStack(spacing: 0) {
                         Spacer().frame(height: 110) // sesuaikan dengan tinggi ScreenHeader

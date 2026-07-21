@@ -37,57 +37,57 @@ struct KonsulListView: View {
                 Color("backgroundColor")
                     .ignoresSafeArea()
                 
+                // Layer 1: Header, selalu nempel di atas
                 VStack(spacing: 16) {
-                    ScreenHeader(title: "Konsultasi") {
+                    ScreenHeader(title: "Pantauan") {
                         showAddSheet = true
                     }
-                    
-                    if allKonsul.isEmpty {
-                        Spacer()
-                        EmptyStateView()
-                        Spacer()
-                    } else {
-                        List {
-                            ForEach(groupedKonsul, id: \.key) { group in
-                                Section {
-                                    ForEach(group.items) { konsul in
-                                        KonsulRowView(konsul: konsul)
-                                            .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                                                Button {
-                                                    konsultasiToDelete = konsul
-                                                    showDeleteAlert = true
-                                                } label: {
-                                                    Label("Hapus", systemImage: "trash")
-                                                }
-                                                .tint(.red)
+                    Spacer()
+                }
+                
+                if allKonsul.isEmpty {
+                    EmptyStateView(message: "Ketuk tombol tambah untuk mencatat konsultasi")
+                } else {
+                    List {
+                        ForEach(groupedKonsul, id: \.key) { group in
+                            Section {
+                                ForEach(group.items) { konsul in
+                                    KonsulRowView(konsul: konsul)
+                                        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                                            Button {
+                                                konsultasiToDelete = konsul
+                                                showDeleteAlert = true
+                                            } label: {
+                                                Label("Hapus", systemImage: "trash")
                                             }
-                                    }
-                                } header: {
-                                    Text(group.key)
-                                        .font(.subheadline)
-                                        .fontWeight(.semibold)
-                                        .foregroundColor(.secondary)
+                                            .tint(.red)
+                                        }
                                 }
+                            } header: {
+                                Text(group.key)
+                                    .font(.subheadline)
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(.secondary)
                             }
                         }
-                        .listStyle(.insetGrouped)
-                        .scrollContentBackground(.hidden)
                     }
+                    .listStyle(.insetGrouped)
+                    .scrollContentBackground(.hidden)
                 }
             }
-            .navigationBarHidden(true)
-            .fullScreenCover(isPresented: $showAddSheet) {
-                AddKonsul()
-                    .interactiveDismissDisabled()
+        }
+        .navigationBarHidden(true)
+        .fullScreenCover(isPresented: $showAddSheet) {
+            AddKonsul()
+                .interactiveDismissDisabled()
+        }
+        .alert("Hapus Konsultasi?", isPresented: $showDeleteAlert, presenting: konsultasiToDelete) { konsultasi in
+            Button("Tidak", role: .cancel) {}
+            Button("Hapus", role: .destructive) {
+                konsulViewModel.delete(konsultasi)
             }
-            .alert("Hapus Konsultasi?", isPresented: $showDeleteAlert, presenting: konsultasiToDelete) { konsultasi in
-                Button("Tidak", role: .cancel) {}
-                Button("Hapus", role: .destructive) {
-                    konsulViewModel.delete(konsultasi)
-                }
-            } message: { _ in
-                Text("Apakah Anda yakin ingin menghapus konsultasi ini?")
-            }
+        } message: { _ in
+            Text("Apakah Anda yakin ingin menghapus konsultasi ini?")
         }
     }
 }
