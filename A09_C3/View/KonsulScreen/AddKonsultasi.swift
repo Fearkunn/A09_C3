@@ -116,6 +116,7 @@ struct AddKonsul: View {
         } message: {
             Text(cancelAlertMessage)
         }
+        .tint(.black)
     }
     
     private func loadExistingData() {
