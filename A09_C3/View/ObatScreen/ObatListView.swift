@@ -52,11 +52,15 @@ struct ObatListView: View {
                             Section {
                                 ForEach(filteredObat) { obat in
                                     ObatRowView(obat: obat)
-                                }
-                                .onDelete { offsets in
-                                    guard let index = offsets.first else { return }
-                                    obatToDelete = filteredObat[index]
-                                    showDeleteAlert = true
+                                        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                                            Button {
+                                                obatToDelete = obat
+                                                showDeleteAlert = true
+                                            } label: {
+                                                Label("Hapus", systemImage: "trash")
+                                            }
+                                            .tint(.red)
+                                        }
                                 }
                             }
                         }

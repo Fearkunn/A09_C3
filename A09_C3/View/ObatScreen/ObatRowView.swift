@@ -36,7 +36,7 @@ struct ObatRowView: View {
                 }
                 
                 Spacer()
-                VStack{
+                VStack (alignment: .trailing, spacing: 4){
                     Text(obat.keterangan.rawValue)
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
