@@ -43,7 +43,6 @@ struct PantauanListView: View {
                 Color("backgroundColor")
                     .ignoresSafeArea()
                 
-                // Layer 1: Header, selalu nempel di atas
                 VStack(spacing: 16) {
                     ScreenHeader(title: "Pantauan") {
                         showAddSheet = true
@@ -51,12 +50,11 @@ struct PantauanListView: View {
                     Spacer()
                 }
                 
-                // Layer 2: Konten, independen — empty state center dari SELURUH layar
                 if allPantauan.isEmpty {
                     EmptyStateView(message: "Ketuk tombol tambah untuk mencatat pantauan")
                 } else {
                     VStack(spacing: 0) {
-                        Spacer().frame(height: 110) // sesuaikan dengan tinggi ScreenHeader
+                        Spacer().frame(height: 60)
                         List {
                             ForEach(groupedPantauan, id: \.month) { group in
                                 Section {

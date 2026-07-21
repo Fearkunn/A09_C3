@@ -31,9 +31,17 @@ struct AddPantauan: View {
         return pantauanBody != pantauanToEdit.pantauanBody || pantauanDate != pantauanToEdit.pantauanDate
     }
     
+    private var isSaveEnabled: Bool {
+        guard pantauanToEdit != nil else {
+            return !pantauanBody.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        }
+        return hasUnsavedChanges
+    }
+    
     var body: some View {
         AddModal(
             title: modalTitle,
+            isSaveEnabled: isSaveEnabled,
             onClose: { handleClose() },
             onSave: { save() }
         ) {
@@ -74,11 +82,13 @@ struct AddPantauan: View {
             }
         }
         .onAppear(perform: loadExistingData)
-        .alert("Apakah Anda yakin ingin menghapus pantauan ini?", isPresented: $showCancelAlert) {
-            Button("Tidak", role: .cancel) {}
-            Button("Hapus", role: .destructive) {
+        .alert("Batalkan penambahan pantauan?", isPresented: $showCancelAlert) {
+            Button("Batalkan", role: .destructive) {
                 dismiss()
             }
+            Button("Lanjutkan Mengedit", role: .cancel) {}
+        } message: {
+            Text("Jika Anda keluar sekarang, informasi pantauan yang telah diisi tidak akan disimpan.")
         }
     }
     
@@ -106,8 +116,6 @@ struct AddPantauan: View {
                 try viewModel.add(date: pantauanDate, body: pantauanBody)
             }
             dismiss()
-        } catch PantauanValidationError.emptyBody {
-            errorMessage = "Masukkan data terlebih dahulu untuk menyimpan"
         } catch {
             errorMessage = "Terjadi kesalahan, coba lagi"
         }
