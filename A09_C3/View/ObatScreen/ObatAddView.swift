@@ -19,6 +19,7 @@ struct ObatAddView: View {
     var body: some View {
         AddModal(
             title: "Obat Baru",
+            isSaveEnabled: viewModel.isFormValid,
             onClose: {
                 viewModel.handleClose(dismiss: { dismiss() })
             },
