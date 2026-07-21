@@ -12,18 +12,20 @@ struct CircleIconButton: View {
     let iconColor: Color
     let backgroundColor: Color
     var iconFont: Font = .footnote
+    var isEnabled: Bool = true
     let action: () -> Void
-
+    
     var body: some View {
         Button(action: action) {
             Image(systemName: systemName)
                 .font(iconFont.weight(.bold))
-                .foregroundColor(iconColor)
+                .foregroundColor(isEnabled ? iconColor : .secondary)
                 .padding(14)
                 .background(
-                    Circle().fill(backgroundColor)
+                    Circle().fill(isEnabled ? backgroundColor : Color.gray.opacity(0.16))
                 )
         }
+        .disabled(!isEnabled)
     }
 }
 
@@ -39,6 +41,14 @@ struct CircleIconButton: View {
             systemName: "checkmark",
             iconColor: .primary,
             backgroundColor: .cyan,
+            isEnabled: false,
+            action: {}
+        )
+        CircleIconButton(
+            systemName: "checkmark",
+            iconColor: .primary,
+            backgroundColor: .cyan,
+            isEnabled: true,
             action: {}
         )
     }

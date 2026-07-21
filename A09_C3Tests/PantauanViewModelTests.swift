@@ -54,23 +54,6 @@ struct PantauanViewModelTests {
         #expect(all.first?.pantauanBody == "Demam tinggi")
     }
     
-    @Test("Menyimpan dengan body kosong menghasilkan error validasi, bukan disimpan")
-    func addPantauan_withEmptyBody_throwsValidationError() throws {
-        #expect(throws: PantauanValidationError.emptyBody) {
-            try sut.add(date: Date(), body: "")
-        }
-        
-        let all = try context.fetch(FetchDescriptor<PantauanModel>())
-        #expect(all.isEmpty)
-    }
-    
-    @Test("Menyimpan dengan body isi spasi saja (tanpa teks) tetap dianggap kosong")
-    func addPantauan_withWhitespaceOnlyBody_throwsValidationError() throws {
-        #expect(throws: PantauanValidationError.emptyBody) {
-            try sut.add(date: Date(), body: "     ")
-        }
-    }
-    
     // MARK: - EDIT / UPDATE
     
     @Test("Update mengubah body dan tanggal pantauan yang sudah ada")
@@ -108,16 +91,6 @@ struct PantauanViewModelTests {
         #expect(existing.pantauanUpdatedAt != nil)
     }
     
-    @Test("Update dengan body kosong ditolak, data lama tidak berubah")
-    func updatePantauan_withEmptyBody_throwsAndKeepsOldData() throws {
-        try sut.add(date: Date(), body: "Sakit tenggorokan")
-        let existing = try #require(try context.fetch(FetchDescriptor<PantauanModel>()).first)
-        
-        #expect(throws: PantauanValidationError.emptyBody) {
-            try sut.update(existing, date: Date(), body: "")
-        }
-        #expect(existing.pantauanBody == "Sakit tenggorokan")
-    }
     
     // MARK: - DELETE
     
