@@ -1,0 +1,58 @@
+//
+//  ExpandableDatePicker.swift
+//  A09_C3
+//
+//  Created by Richie Daryl Kwenandar on 21/07/26.
+//
+
+import SwiftUI
+
+struct ExpandableDatePicker: View {
+    let label: String
+    @Binding var selection: Date
+    
+    @State private var isExpanded = false
+    
+    private var formattedDate: String {
+        selection.formatted(
+            .dateTime.day().month(.abbreviated).year()
+            .locale(Locale(identifier: "id_ID"))
+        )
+    }
+    
+    var body: some View {
+        Button {
+            withAnimation(.easeOut(duration: 0.2)) {
+                isExpanded.toggle()
+            }
+        } label: {
+            HStack {
+                Text(label)
+                    .foregroundStyle(.primary)
+                
+                Spacer()
+                
+                Text(formattedDate)
+                    .foregroundStyle(isExpanded ? .cyan : .primary)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 6)
+                    .background(Color.gray.opacity(0.16))
+                    .clipShape(Capsule())
+                    .animation(nil, value: isExpanded)
+            }
+        }
+        .buttonStyle(.plain)
+        
+        if isExpanded {
+            DatePicker(
+                "",
+                selection: $selection,
+                displayedComponents: [.date]
+            )
+            .datePickerStyle(.graphical)
+            .environment(\.locale, Locale(identifier: "id_ID"))
+            .labelsHidden()
+            .transition(.opacity.combined(with: .move(edge: .top)))
+        }
+    }
+}

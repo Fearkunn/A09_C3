@@ -42,13 +42,7 @@ struct AddKonsul: View {
                 TextField(text: $namaDokter, prompt: Text("Nama Dokter")) {
                     Text("Nama")
                 }
-                DatePicker(
-                    "Tanggal konsultasi",
-                    selection: $tanggalKonsultasi,
-                    displayedComponents: [.date]
-                )
-                .datePickerStyle(.compact)
-                .environment(\.locale, Locale(identifier: "id_ID")) //memaksa jadi bahasa indo
+                ExpandableDatePicker(label: "Tanggal konsultasi", selection: $tanggalKonsultasi)
             }
             
             Section {
