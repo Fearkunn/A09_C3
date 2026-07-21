@@ -14,27 +14,15 @@ final class SearchViewModel {
     private let modelContext: ModelContext
     let historyStore: SearchHistoryStore
     
-    var query: String = ""
-    
     init(modelContext: ModelContext, historyStore: SearchHistoryStore = SearchHistoryStore()) {
         self.modelContext = modelContext
         self.historyStore = historyStore
     }
     
-    var trimmedQuery: String {
-        query.trimmingCharacters(in: .whitespacesAndNewlines)
-    }
-    
-    var hasQuery: Bool {
-        !trimmedQuery.isEmpty
-    }
-    
-    var groupedResults: [(category: SearchCategory, items: [SearchResultItem])] {
-        guard hasQuery else { return [] }
-        
-        let obatResults = searchObat(matching: trimmedQuery)
-        let pantauanResults = searchPantauan(matching: trimmedQuery)
-        let konsulResults = searchKonsul(matching: trimmedQuery)
+    func groupedResults(for query: String) -> [(category: SearchCategory, items: [SearchResultItem])] {
+        let obatResults = searchObat(matching: query)
+        let pantauanResults = searchPantauan(matching: query)
+        let konsulResults = searchKonsul(matching: query)
         
         return [
             (.obat, obatResults),
@@ -43,30 +31,31 @@ final class SearchViewModel {
         ].filter { !$0.items.isEmpty }
     }
     
-    var hasNoResults: Bool {
-        hasQuery && groupedResults.isEmpty
+    func commitSearch(_ query: String) {
+        historyStore.add(query: query)
     }
     
-    func commitSearch() {
-        historyStore.add(query: trimmedQuery)
+    func selectHistory(_ item: SearchHistoryItem) -> String {
+        item.query
     }
-    
-    func selectHistory(_ item: SearchHistoryItem) {
-        query = item.query
-    }
-    
-    // MARK: - Search implementations (pure filtering, testable via injected data)
     
     func searchObat(matching keyword: String) -> [SearchResultItem] {
         let all = (try? modelContext.fetch(FetchDescriptor<Obat>())) ?? []
         return all
             .filter { $0.nama.localizedCaseInsensitiveContains(keyword) }
             .map { obat in
-                SearchResultItem(
+                let dosisWithUnit: String = {
+                    switch obat.jenis {
+                    case .tablet, .kapsul: return "\(obat.dosis) mg"
+                    case .sirup: return "\(obat.dosis) ml"
+                    }
+                }()
+                
+                return SearchResultItem(
                     category: .obat,
                     primaryText: obat.nama,
-                    secondaryText: obat.keterangan.rawValue,
-                    contextText: "\(obat.frekuensi) \(obat.dosis)",
+                    secondaryText: obat.frekuensi,
+                    contextText: "\(obat.keterangan.rawValue) · \(dosisWithUnit)",
                     destination: .obat(obat)
                 )
             }
@@ -97,13 +86,18 @@ final class SearchViewModel {
                 $0.content.localizedCaseInsensitiveContains(keyword)
             }
             .map { konsul in
-                SearchResultItem(
+                let tanggal = konsul.tanggalKonsultasi.formatted(
+                    .dateTime
+                        .day()
+                        .month(.twoDigits)
+                        .year(.twoDigits)
+                )
+                
+                return SearchResultItem(
                     category: .konsultasi,
                     primaryText: konsul.namaDokter,
-                    secondaryText: konsul.content,
-                    contextText: konsul.tanggalKonsultasi.formatted(
-                        .dateTime.day().month().year().locale(Locale(identifier: "id_ID"))
-                    ),
+                    secondaryText: "\(tanggal) \(konsul.content)",
+                    contextText: nil,
                     destination: .konsul(konsul)
                 )
             }
