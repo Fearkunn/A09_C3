@@ -9,6 +9,7 @@ import SwiftUI
 
 struct AddModal<Content: View>: View {
     let title: String
+    var isSaveEnabled: Bool = true
     let onClose: () -> Void
     let onSave: () -> Void
     @ViewBuilder let content: Content
@@ -35,6 +36,7 @@ struct AddModal<Content: View>: View {
                     systemName: "checkmark",
                     iconColor: .primary,
                     backgroundColor: .cyan,
+                    isEnabled: isSaveEnabled,
                     action: onSave
                 )
             }
@@ -55,6 +57,7 @@ struct AddModal<Content: View>: View {
 #Preview {
     AddModal(
         title: "Konsultasi Baru",
+        isSaveEnabled: false,
         onClose: {},
         onSave: {}
     ) {

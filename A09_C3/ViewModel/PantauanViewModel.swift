@@ -20,10 +20,6 @@ final class PantauanViewModel {
     func add(date: Date, body: String) throws {
         let trimmedBody = body.trimmingCharacters(in: .whitespacesAndNewlines)
         
-        guard !trimmedBody.isEmpty else {
-            throw PantauanValidationError.emptyBody
-        }
-        
         let pantauan = PantauanModel(
             pantauanDate: date,
             pantauanBody: trimmedBody
@@ -34,10 +30,6 @@ final class PantauanViewModel {
     
     func update(_ pantauan: PantauanModel, date: Date, body: String) throws {
         let trimmedBody = body.trimmingCharacters(in: .whitespacesAndNewlines)
-        
-        guard !trimmedBody.isEmpty else {
-            throw PantauanValidationError.emptyBody
-        }
         
         pantauan.pantauanDate = date
         pantauan.pantauanBody = trimmedBody
@@ -57,8 +49,4 @@ final class PantauanViewModel {
         )
         return (try? modelContext.fetch(descriptor)) ?? []
     }
-}
-
-enum PantauanValidationError: Error, Equatable {
-    case emptyBody
 }
