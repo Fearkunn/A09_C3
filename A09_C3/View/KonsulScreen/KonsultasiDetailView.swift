@@ -39,7 +39,7 @@ struct KonsulDetailView: View {
                     CircleIconButton(
                         systemName: "chevron.left",
                         iconColor: .black,
-                        backgroundColor: Color.gray.opacity(0.16),
+                        backgroundColor: Color(.tertiarySystemFill),
                         action: { dismiss() }
                     )
                     .accessibilityLabel("Tombol Kembali")
@@ -49,7 +49,7 @@ struct KonsulDetailView: View {
                     EditCircleButton(
                         title: "Edit",
                         textColor: .primary,
-                        backgroundColor: Color.gray.opacity(0.16),
+                        backgroundColor: Color(.tertiarySystemFill),
                         action: { showEditSheet = true }
                     )
                     .accessibilityLabel("Edit Konsultasi")

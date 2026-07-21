@@ -47,8 +47,8 @@ struct PantauanDetailView: View {
                     
                     EditCircleButton(
                         title: "Edit",
-                        textColor: .white,
-                        backgroundColor: .cyan,
+                        textColor: .primary,
+                        backgroundColor: Color(.tertiarySystemFill),
                         action: { showEditSheet = true }
                     )
                     .accessibilityLabel("Edit Pantauan")
