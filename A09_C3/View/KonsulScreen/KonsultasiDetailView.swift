@@ -59,24 +59,28 @@ struct KonsulDetailView: View {
                 
                 ScrollView {
                     VStack(alignment: .leading, spacing: 16) {
-                        dynamicLayout {
-                            Text(konsultasi.namaDokter)
+                        VStack(alignment: .leading, spacing: 12) {
+                            dynamicLayout {
+                                Text(konsultasi.namaDokter)
+                            }
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            
+                            Divider()
+                            
+                            dynamicLayout{
+                                Text("Tanggal konsultasi")
+                                    .foregroundStyle(.secondary)
+                                if !dynamicTypeSize.isAccessibilitySize {
+                                    Spacer()
+                                }
+                                Text(formattedDate)
+                                
+                            }
+                            .frame(maxWidth: .infinity, alignment: .leading)
                         }
-                        .frame(maxWidth: .infinity, alignment: .leading)
                         .padding()
                         .background(Color(.secondarySystemGroupedBackground))
                         .clipShape(RoundedRectangle(cornerRadius: 12))
-                        
-                        dynamicLayout{
-                            Text("Tanggal konsultasi")
-                                .foregroundStyle(.secondary)
-                            Spacer()
-                            Text(formattedDate)
-                            
-                        }.frame(maxWidth: .infinity, alignment: .leading)
-                            .padding()
-                            .background(Color(.secondarySystemGroupedBackground))
-                            .clipShape(RoundedRectangle(cornerRadius: 12))
                         
                         dynamicLayout{
                             Text(konsultasi.content)
@@ -91,6 +95,7 @@ struct KonsulDetailView: View {
                     }
                     .padding(.horizontal, 20)
                 }
+                
                 
             }
         }
