@@ -60,6 +60,7 @@ struct AddKonsul: View {
                             prompt: Text("Ketik atau ketuk ikon mikrofon untuk berbicara"),
                             axis: .vertical
                         )
+                        .autocorrectionDisabled()
                         .lineLimit(8...100)
                         .padding(.trailing, 44)
                         

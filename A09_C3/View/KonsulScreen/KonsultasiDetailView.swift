@@ -60,9 +60,6 @@ struct KonsulDetailView: View {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 16) {
                         dynamicLayout {
-                            Text("Nama dokter")
-                                .foregroundStyle(.secondary)
-                            Spacer()
                             Text(konsultasi.namaDokter)
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
