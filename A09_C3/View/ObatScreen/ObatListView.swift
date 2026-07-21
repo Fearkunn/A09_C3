@@ -101,6 +101,7 @@ struct ObatListView: View {
         } message: {
             Text("Apakah anda yakin untuk menghapus obat ini?")
         }
+        .tint(.black)
     }
 }
 
