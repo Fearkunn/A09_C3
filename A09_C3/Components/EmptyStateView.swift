@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct EmptyStateView: View {
+    let message: String
+    
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     
     var isAccessibilitySize: Bool {
@@ -23,15 +25,14 @@ struct EmptyStateView: View {
     var body: some View {
         VStack(spacing: 8) {
             Image(systemName: "pencil.and.list.clipboard")
-                .font(.system(size: 70, weight: .semibold))
+                .font(.system(size: 110, weight: .semibold))
                 .foregroundStyle(.secondary)
             
             Text(indonesianText("Belum ada data"))
-                .font(.title3)
-                .fontWeight(.semibold)
+                .font(.subheadline)
                 .foregroundStyle(.secondary)
             
-            Text(indonesianText("Ketuk tombol tambah untuk memulai"))
+            Text(indonesianText(message))
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
         }
@@ -46,6 +47,6 @@ struct EmptyStateView: View {
     ZStack {
         Color("backgroundColor")
             .ignoresSafeArea()
-        EmptyStateView()
+        EmptyStateView(message: "Ketuk tombol tambah untuk mencatat pantauan")
     }
 }
