@@ -38,6 +38,11 @@ final class ObatAddViewModel {
     var showCancelAlert = false
     var attemptedSave = false
 
+    var jenisJadwal: ObatTab {
+        get { isKondisional ? .kondisional : .rutin }
+        set { isKondisional = (newValue == .kondisional) }
+    }
+    
     // Satuan untuk chip kedua, menyesuaikan Jenis obat yang dipilih
     var satuanJumlah: String {
         switch jenis {
