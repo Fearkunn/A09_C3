@@ -19,6 +19,7 @@ struct ObatAddView: View {
     var body: some View {
         AddModal(
             title: "Obat Baru",
+            isSaveEnabled: viewModel.isFormValid,
             onClose: {
                 viewModel.handleClose(dismiss: { dismiss() })
             },
@@ -91,13 +92,13 @@ struct ObatAddView: View {
                 }
             }
         }
-        .alert("Apakah Anda yakin ingin membatalkan obat ini?", isPresented: $viewModel.showCancelAlert) {
-            Button("Tidak", role: .cancel) { }
-            Button("Hapus", role: .destructive) {
+        .alert("Batalkan penambahan obat?", isPresented: $viewModel.showCancelAlert) {
+            Button("Batalkan", role: .destructive) {
                 dismiss()
             }
+            Button("Lanjutkan Mengedit", role: .cancel) {}
         } message: {
-            Text("Perubahan yang sudah Anda buat tidak akan disimpan.")
+            Text("Jika Anda keluar sekarang, informasi obat yang telah diisi tidak akan disimpan.")
         }
         .interactiveDismissDisabled(viewModel.hasUnsavedChanges)
     }
