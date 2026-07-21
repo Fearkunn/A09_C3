@@ -84,6 +84,7 @@ struct AddPantauan: View {
         } message: {
             Text("Jika Anda keluar sekarang, informasi pantauan yang telah diisi tidak akan disimpan.")
         }
+        .tint(.black)
     }
     
     private func loadExistingData() {

@@ -92,6 +92,7 @@ struct KonsulListView: View {
         } message: { _ in
             Text("Apakah Anda yakin ingin menghapus konsultasi ini?")
         }
+        .tint(.black)
     }
 }
 
