@@ -27,7 +27,7 @@ struct AddModal<Content: View>: View {
                 Spacer()
 
                 Text(title)
-                    .font(.system(size: 19, weight: .semibold))
+                    .font(.system(size: 20, weight: .semibold))
 
                 Spacer()
 

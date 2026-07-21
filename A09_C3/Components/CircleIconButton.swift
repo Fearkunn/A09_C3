@@ -11,16 +11,15 @@ struct CircleIconButton: View {
     let systemName: String
     let iconColor: Color
     let backgroundColor: Color
-    var size: CGFloat = 50
-    var iconSize: CGFloat = 24
+    var iconFont: Font = .footnote
     let action: () -> Void
 
     var body: some View {
         Button(action: action) {
             Image(systemName: systemName)
-                .font(.system(size: iconSize, weight: .bold))
+                .font(iconFont.weight(.bold))
                 .foregroundColor(iconColor)
-                .frame(width: size, height: size)
+                .padding(14)
                 .background(
                     Circle().fill(backgroundColor)
                 )
