@@ -56,29 +56,33 @@ struct PantauanDetailView: View {
                 .padding(.horizontal, 20)
                 .padding(.top, 20)
                 
-                VStack(alignment: .leading, spacing: 16) {
-                    dynamicLayout {
-                        Text("Tanggal pantauan")
-                            .foregroundStyle(.secondary)
-                        if !dynamicTypeSize.isAccessibilitySize {
-                            Spacer()
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 16) {
+                        dynamicLayout {
+                            Text("Tanggal pantauan")
+                                .foregroundStyle(.secondary)
+                            if !dynamicTypeSize.isAccessibilitySize {
+                                Spacer()
+                            }
+                            Text(formattedDate)
                         }
-                        Text(formattedDate)
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding()
-                    .background(Color(.secondarySystemGroupedBackground))
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
-                    
-                    Text(pantauan.pantauanBody)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                         .padding()
-                        .frame(maxWidth: .infinity, minHeight: 200, alignment: .topLeading)
                         .background(Color(.secondarySystemGroupedBackground))
                         .clipShape(RoundedRectangle(cornerRadius: 12))
-                    
-                    Spacer()
+                        
+                        dynamicLayout{
+                            Text(pantauan.pantauanBody)
+                                .padding()
+                                .frame(maxWidth: .infinity, minHeight: 200, alignment: .topLeading)
+                                .background(Color(.secondarySystemGroupedBackground))
+                                .clipShape(RoundedRectangle(cornerRadius: 12))
+                            
+                            Spacer()
+                        }
+                    }
+                    .padding(.horizontal, 20)
                 }
-                .padding(.horizontal, 20)
             }
         }
         .navigationBarHidden(true)
@@ -92,7 +96,7 @@ struct PantauanDetailView: View {
 #Preview {
     NavigationStack {
         PantauanDetailView(
-            pantauan: PantauanModel(pantauanDate: .now, pantauanBody: "Sakit tenggorokan batuk batuk batuk")
+            pantauan: PantauanModel(pantauanDate: .now, pantauanBody: "Sakit tenggorokan batuk batuk")
         )
     }
 }

@@ -48,7 +48,7 @@ struct ObatListView: View {
                     if filteredObat.isEmpty {
                         EmptyStateView(message: "Ketuk tombol tambah untuk menambah obat")
                         Spacer()
-                            .frame(height: 263)
+                            .frame(height: 100)
                     }
                     else {
                         List {

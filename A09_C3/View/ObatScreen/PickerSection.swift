@@ -11,50 +11,64 @@ import SwiftUI
 // AC: User can input Obat details manually — Frekuensi (kali sehari & jumlah per konsumsi)
 struct PickerSection: View {
     @Bindable var viewModel: ObatAddViewModel
+    @Environment(\.dynamicTypeSize) var dynamicTypeSize
+    
+    var dynamicLayout: AnyLayout {
+        dynamicTypeSize.isAccessibilitySize
+        ? AnyLayout(VStackLayout(alignment: .leading, spacing: 4))
+        : AnyLayout(HStackLayout(alignment: .top))
+    }
 
     var body: some View {
-        HStack {
-            Text("Frekuensi")
-            Spacer()
-            FrekuensiChipButton(
-                title: "\(viewModel.jumlahPerHari) kali sehari",
-                isSelected: viewModel.activeChip == .jumlahPerHari && viewModel.isPickerExpanded
-            ) {
-                withAnimation {
-                    viewModel.selectFrekuensiChip(.jumlahPerHari)
-                }
-            }
-            FrekuensiChipButton(
-                title: "\(viewModel.jumlahPerKali) \(viewModel.satuanJumlah)",
-                isSelected: viewModel.activeChip == .jumlahPerKali && viewModel.isPickerExpanded
-            ) {
-                withAnimation {
-                    viewModel.selectFrekuensiChip(.jumlahPerKali)
-                }
-            }
-        }
-
-        // Wheel picker angka. Hanya tampil setelah salah satu chip di atas di-tap,
-        // jadi saat halaman baru dibuka pickernya belum muncul.
-        if viewModel.isPickerExpanded {
-            HStack {
-                Picker("", selection: wheelSelection) {
-                    ForEach(1...20, id: \.self) { angka in
-                        Text("\(angka)").tag(angka)
+        VStack(alignment: .leading, spacing: 8) {
+            dynamicLayout {
+                Text("Frekuensi")
+                Spacer()
+                FrekuensiChipButton(
+                    title: "\(viewModel.jumlahPerHari) kali sehari",
+                    isSelected: viewModel.activeChip == .jumlahPerHari && viewModel.isPickerExpanded
+                ) {
+                    withAnimation {
+                        viewModel.selectFrekuensiChip(.jumlahPerHari)
                     }
                 }
-                .pickerStyle(.wheel)
-                .frame(height: 120)
-                .clipped()
-                // Force SwiftUI bikin ulang wheel-nya tiap kali chip berpindah,
-                // supaya nilai yang ditampilkan langsung sinkron tanpa perlu tap dulu.
-                .id(viewModel.activeChip)
-
-                Text(viewModel.activeChip == .jumlahPerHari ? "kali" : viewModel.satuanJumlah)
-                    .font(.body.weight(.semibold))
-                    .padding(.trailing, 8)
+                FrekuensiChipButton(
+                    title: "\(viewModel.jumlahPerKali) \(viewModel.satuanJumlah)",
+                    isSelected: viewModel.activeChip == .jumlahPerKali && viewModel.isPickerExpanded
+                ) {
+                    withAnimation {
+                        viewModel.selectFrekuensiChip(.jumlahPerKali)
+                    }
+                }
             }
-            .transition(.opacity.combined(with: .move(edge: .top)))
+            
+            // Wheel picker angka. Hanya tampil setelah salah satu chip di atas di-tap,
+            // jadi saat halaman baru dibuka pickernya belum muncul.
+            if viewModel.isPickerExpanded {
+                HStack {
+                    Picker("", selection: wheelSelection) {
+                        ForEach(1...20, id: \.self) { angka in
+                            Text("\(angka)").tag(angka)
+                        }
+                    }
+                    .pickerStyle(.wheel)
+                    .frame(width: dynamicTypeSize >= .accessibility4 &&
+                           viewModel.activeChip == .jumlahPerKali &&
+                           ["Sendok", "Kapsul"].contains(viewModel.satuanJumlah)
+                           ? 135
+                           : nil,
+                    height: 120)
+                    .clipped()
+                    // Force SwiftUI bikin ulang wheel-nya tiap kali chip berpindah,
+                    // supaya nilai yang ditampilkan langsung sinkron tanpa perlu tap dulu.
+                    .id(viewModel.activeChip)
+                    
+                    Text(viewModel.activeChip == .jumlahPerHari ? "kali" : viewModel.satuanJumlah)
+                        .font(.body.weight(.semibold))
+                        .padding(.trailing, 8)
+                }
+                .transition(.opacity.combined(with: .move(edge: .top)))
+            }
         }
     }
 

@@ -12,6 +12,19 @@ struct ObatAddView: View {
 
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.dynamicTypeSize) var dynamicTypeSize
+    
+    var dynamicLayout: AnyLayout {
+        dynamicTypeSize.isAccessibilitySize
+        ? AnyLayout(VStackLayout(alignment: .leading))
+        : AnyLayout(HStackLayout(alignment: .top))
+    }
+    
+    var dynamicLayoutJenis: AnyLayout {
+        dynamicTypeSize >= .accessibility4
+            ? AnyLayout(VStackLayout(alignment: .leading))
+            : AnyLayout(HStackLayout(alignment: .center))
+    }
 
     @State private var viewModel = ObatAddViewModel()
     @State private var selectedTab: ObatTab = .rutin
@@ -35,27 +48,35 @@ struct ObatAddView: View {
                         .foregroundStyle(.red)
                 }
                 
-                Picker("Jenis", selection: $viewModel.jenis) {
-                    ForEach(JenisObat.allCases) { jenis in
-                        Text(jenis.rawValue).tag(jenis)
+                dynamicLayoutJenis {
+                    Text("Jenis")
+                    Spacer()
+                    Picker("", selection: $viewModel.jenis) {
+                        ForEach(JenisObat.allCases) { jenis in
+                            Text(jenis.rawValue).tag(jenis)
+                        }
                     }
+                    .pickerStyle(.menu)
+                    .labelsHidden()
+                    .fixedSize()
                 }
 
                 PickerSection(viewModel: viewModel)
-
+                
                 HStack {
                     Text("Dosis")
-                    Spacer()
-                    TextField("100", text: $viewModel.dosis)
-                        .keyboardType(.numberPad)
-                        .onChange(of: viewModel.dosis) { _, newValue in
-                            viewModel.updateDosis(newValue)
-                        }
-                        .multilineTextAlignment(.trailing)
-                        .foregroundStyle(.secondary)
-
-                    Text(viewModel.satuanDosis)
-                        .foregroundStyle(.secondary)
+                    HStack(spacing: 4) {
+                        TextField("100", text: $viewModel.dosis)
+                            .keyboardType(.numberPad)
+                            .onChange(of: viewModel.dosis) { _, newValue in
+                                viewModel.updateDosis(newValue)
+                            }
+                            .multilineTextAlignment(.trailing)
+                            .foregroundStyle(.secondary)
+                        
+                        Text(viewModel.satuanDosis)
+                            .foregroundStyle(.secondary)
+                    }
                 }
                 
                 if viewModel.attemptedSave && viewModel.dosis.trimmingCharacters(in: .whitespaces).isEmpty {
@@ -68,6 +89,7 @@ struct ObatAddView: View {
                     ForEach(KeteranganObat.allCases) { keterangan in
                         Text(keterangan.rawValue).tag(keterangan)
                     }
+                    .tint(.secondary)
                 }
 
                 // AC: If an Obat is conditional, user can toggle Kondisional to enable

@@ -10,8 +10,15 @@ import SwiftUI
 struct ExpandableDatePicker: View {
     let label: String
     @Binding var selection: Date
+    @Environment(\.dynamicTypeSize) var dynamicTypeSize
     
     @State private var isExpanded = false
+    
+    var dynamicLayout: AnyLayout {
+        dynamicTypeSize.isAccessibilitySize
+        ? AnyLayout(VStackLayout(alignment: .leading, spacing: 4))
+        : AnyLayout(HStackLayout(alignment: .top))
+    }
     
     private var formattedDate: String {
         selection.formatted(
@@ -27,18 +34,20 @@ struct ExpandableDatePicker: View {
             }
         } label: {
             HStack {
-                Text(label)
-                    .foregroundStyle(.primary)
-                
-                Spacer()
-                
-                Text(formattedDate)
-                    .foregroundStyle(isExpanded ? .cyan : .primary)
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 6)
-                    .background(Color.gray.opacity(0.16))
-                    .clipShape(Capsule())
-                    .animation(nil, value: isExpanded)
+                dynamicLayout{
+                    Text(label)
+                        .foregroundStyle(.primary)
+                    
+                    Spacer()
+                    
+                    Text(formattedDate)
+                        .foregroundStyle(isExpanded ? .cyan : .primary)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 6)
+                        .background(Color.gray.opacity(0.16))
+                        .clipShape(Capsule())
+                        .animation(nil, value: isExpanded)
+                }
             }
         }
         .buttonStyle(.plain)
