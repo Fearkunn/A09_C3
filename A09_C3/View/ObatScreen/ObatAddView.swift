@@ -45,6 +45,10 @@ struct ObatAddView: View {
                     Text("Dosis")
                     Spacer()
                     TextField("Tambah dosis", text: $viewModel.dosis)
+                        .keyboardType(.numberPad)
+                        .onChange(of: viewModel.dosis) { _, newValue in
+                                viewModel.dosis = newValue.filter(\.isNumber)
+                            }
                         .multilineTextAlignment(.trailing)
                         .foregroundStyle(.secondary)
                 }

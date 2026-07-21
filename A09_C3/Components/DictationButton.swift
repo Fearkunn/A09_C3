@@ -14,13 +14,21 @@ struct DictationButton: View {
     
     @State private var baseText: String = ""
     
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
+    private var iconSize: CGFloat {
+        dynamicTypeSize.isAccessibilitySize ? 30 : 16
+    }
+
+    private var buttonSize: CGFloat {
+        dynamicTypeSize.isAccessibilitySize ? 50 : 36
+    }
+    
     var body: some View {
         CircleIconButton(
             systemName: dictationManager.isRecording ? "stop.fill" : "mic.fill",
             iconColor: dictationManager.isRecording ? .white : .primary,
             backgroundColor: dictationManager.isRecording ? .red : Color(.tertiarySystemFill),
-            size: 36,
-            iconSize: 16,
             action: {
                 Task { await toggleDictation() }
             }

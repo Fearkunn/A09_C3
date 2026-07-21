@@ -9,6 +9,12 @@ import SwiftUI
 
 struct PantauanDetailView: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.dynamicTypeSize) var dynamicTypeSize
+    
+    var dynamicLayout: AnyLayout{
+        dynamicTypeSize.isAccessibilitySize ? AnyLayout(VStackLayout(alignment: .leading)) : AnyLayout(HStackLayout(alignment: .top))
+    }
+    
     let pantauan: PantauanModel
     
     @State private var showEditSheet = false
@@ -39,10 +45,10 @@ struct PantauanDetailView: View {
                     
                     Spacer()
                     
-                    CircleIconButton(
-                        systemName: "pencil",
-                        iconColor: .primary,
-                        backgroundColor: .cyan,
+                    EditCircleButton(
+                        title: "Edit",
+                        textColor: .primary,
+                        backgroundColor: Color(.tertiarySystemFill),
                         action: { showEditSheet = true }
                     )
                     .accessibilityLabel("Edit Pantauan")
@@ -51,20 +57,20 @@ struct PantauanDetailView: View {
                 .padding(.top, 20)
                 
                 VStack(alignment: .leading, spacing: 16) {
-                    HStack {
+                    dynamicLayout {
                         Text("Tanggal pantauan")
                             .foregroundStyle(.secondary)
-                        Spacer()
                         Text(formattedDate)
                     }
+                    .frame(maxWidth: .infinity, alignment: .leading)
                     .padding()
-                    .background(Color(.secondarySystemBackground))
+                    .background(Color(.secondarySystemGroupedBackground))
                     .clipShape(RoundedRectangle(cornerRadius: 12))
                     
                     Text(pantauan.pantauanBody)
                         .padding()
                         .frame(maxWidth: .infinity, minHeight: 200, alignment: .topLeading)
-                        .background(Color(.secondarySystemBackground))
+                        .background(Color(.secondarySystemGroupedBackground))
                         .clipShape(RoundedRectangle(cornerRadius: 12))
                     
                     Spacer()

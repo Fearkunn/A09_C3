@@ -52,23 +52,26 @@ struct AddKonsul: View {
             }
             
             Section {
-                ZStack(alignment: .bottomTrailing) {
-                    TextField(
-                        "Content",
-                        text: $content,
-                        prompt: Text("Ketik atau ketuk ikon mikrofon untuk berbicara"),
-                        axis: .vertical
-                    )
-                    .lineLimit(8...40)
-                    .padding(.trailing, 44)
-                    
-                    DictationButton(
-                        dictationManager: dictationManager,
-                        text: $content,
-                        onError: { message in errorMessage = message }
-                    )
-                    .padding(8)
+                ScrollView{
+                    ZStack(alignment: .bottomTrailing) {
+                        TextField(
+                            "Content",
+                            text: $content,
+                            prompt: Text("Ketik atau ketuk ikon mikrofon untuk berbicara"),
+                            axis: .vertical
+                        )
+                        .lineLimit(8...100)
+                        .padding(.trailing, 44)
+                        
+                        DictationButton(
+                            dictationManager: dictationManager,
+                            text: $content,
+                            onError: { message in errorMessage = message }
+                        )
+                        .padding(8)
+                    }
                 }
+                
                 
                 if let errorMessage {
                     Text(errorMessage)
