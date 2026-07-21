@@ -39,7 +39,7 @@ struct KonsulListView: View {
                 
                 // Layer 1: Header, selalu nempel di atas
                 VStack(spacing: 16) {
-                    ScreenHeader(title: "Pantauan") {
+                    ScreenHeader(title: "Konsultasi") {
                         showAddSheet = true
                     }
                     Spacer()
@@ -48,31 +48,34 @@ struct KonsulListView: View {
                 if allKonsul.isEmpty {
                     EmptyStateView(message: "Ketuk tombol tambah untuk mencatat konsultasi")
                 } else {
-                    List {
-                        ForEach(groupedKonsul, id: \.key) { group in
-                            Section {
-                                ForEach(group.items) { konsul in
-                                    KonsulRowView(konsul: konsul)
-                                        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                                            Button {
-                                                konsultasiToDelete = konsul
-                                                showDeleteAlert = true
-                                            } label: {
-                                                Label("Hapus", systemImage: "trash")
+                    VStack(spacing: 0) {
+                        Spacer().frame(height: 110)
+                        List {
+                            ForEach(groupedKonsul, id: \.key) { group in
+                                Section {
+                                    ForEach(group.items) { konsul in
+                                        KonsulRowView(konsul: konsul)
+                                            .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                                                Button {
+                                                    konsultasiToDelete = konsul
+                                                    showDeleteAlert = true
+                                                } label: {
+                                                    Label("Hapus", systemImage: "trash")
+                                                }
+                                                .tint(.red)
                                             }
-                                            .tint(.red)
-                                        }
+                                    }
+                                } header: {
+                                    Text(group.key)
+                                        .font(.subheadline)
+                                        .fontWeight(.semibold)
+                                        .foregroundColor(.secondary)
                                 }
-                            } header: {
-                                Text(group.key)
-                                    .font(.subheadline)
-                                    .fontWeight(.semibold)
-                                    .foregroundColor(.secondary)
                             }
                         }
+                        .listStyle(.insetGrouped)
+                        .scrollContentBackground(.hidden)
                     }
-                    .listStyle(.insetGrouped)
-                    .scrollContentBackground(.hidden)
                 }
             }
         }

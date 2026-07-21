@@ -60,6 +60,9 @@ struct PantauanDetailView: View {
                     dynamicLayout {
                         Text("Tanggal pantauan")
                             .foregroundStyle(.secondary)
+                        if !dynamicTypeSize.isAccessibilitySize {
+                            Spacer()
+                        }
                         Text(formattedDate)
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
