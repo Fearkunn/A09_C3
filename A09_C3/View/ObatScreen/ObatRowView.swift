@@ -41,7 +41,12 @@ struct ObatRowView: View {
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.trailing)
-                    Text(obat.dosis)
+                    Text({
+                        switch obat.jenis {
+                        case .tablet, .kapsul: return "\(obat.dosis) mg"
+                        case .sirup: return "\(obat.dosis) ml"
+                        }
+                    }())
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.trailing)
@@ -57,7 +62,7 @@ struct ObatRowView: View {
     let obat = Obat(
         nama: "Paracetamol",
         jenis: .tablet,
-        dosis: "1 tablet",
+        dosis: "1",
         frekuensi: "3 × sehari 1 tablet",
         keterangan: .sebelumMakan
     )
