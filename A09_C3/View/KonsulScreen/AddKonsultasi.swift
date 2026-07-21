@@ -19,9 +19,27 @@ struct AddKonsul: View {
     @State private var dictationManager = DictationManager()
     @State private var errorMessage: String?
     @State private var showCancelAlert = false
+    @State private var errorMessageName: String?
     
     private var modalTitle: String {
         konsultasiToEdit == nil ? "Konsultasi Baru" : "Edit Konsultasi"
+    }
+    
+    private func isValidDokterName(_ name: String) -> Bool {
+        let allowedCharacters = CharacterSet.letters
+            .union(.whitespaces)
+            .union(CharacterSet(charactersIn: ".,"))
+        return name.unicodeScalars.allSatisfy { allowedCharacters.contains($0) }
+    }
+    
+    private var cancelAlertTitle: String {
+        konsultasiToEdit == nil ? "Batalkan penambahan konsultasi?" : "Batalkan perubahan?"
+    }
+    
+    private var cancelAlertMessage: String {
+        konsultasiToEdit == nil
+        ? "Jika Anda keluar sekarang, informasi konsultasi yang telah diisi tidak akan disimpan."
+        : "Jika Anda kembali sekarang, semua perubahan yang telah dibuat akan hilang."
     }
     
     private var hasUnsavedChanges: Bool {
@@ -31,9 +49,17 @@ struct AddKonsul: View {
         return namaDokter != konsultasiToEdit.namaDokter || tanggalKonsultasi != konsultasiToEdit.tanggalKonsultasi || content != konsultasiToEdit.content
     }
     
+    private var isSaveEnabled: Bool {
+        guard konsultasiToEdit != nil else {
+            return !namaDokter.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        }
+        return hasUnsavedChanges
+    }
+    
     var body: some View {
         AddModal(
             title: modalTitle,
+            isSaveEnabled: isSaveEnabled,
             onClose: { handleClose() },
             onSave: {
                 save() }
@@ -41,6 +67,11 @@ struct AddKonsul: View {
             Section {
                 TextField(text: $namaDokter, prompt: Text("Nama Dokter")) {
                     Text("Nama")
+                }
+                if let errorMessageName {
+                    Text(errorMessageName)
+                        .font(.caption)
+                        .foregroundStyle(.red)
                 }
                 ExpandableDatePicker(label: "Tanggal konsultasi", selection: $tanggalKonsultasi)
             }
@@ -75,58 +106,66 @@ struct AddKonsul: View {
                 }
             }
         }
-    
+        
         .onAppear(perform: loadExistingData)
-        .alert("Apakah Anda yakin ingin menghapus konsultasi ini?", isPresented: $showCancelAlert) {
-            Button("Tidak", role: .cancel) {}
-            Button("Hapus", role: .destructive) {
+        .alert(cancelAlertTitle, isPresented: $showCancelAlert) {
+            Button("Batalkan", role: .destructive) {
                 dismiss()
             }
+            Button("Lanjutkan Mengedit", role: .cancel) {}
+        } message: {
+            Text(cancelAlertMessage)
         }
-}
-
-private func loadExistingData() {
-    guard let konsultasiToEdit else { return }
-    namaDokter = konsultasiToEdit.namaDokter
-    tanggalKonsultasi = konsultasiToEdit.tanggalKonsultasi
-    content = konsultasiToEdit.content
-}
-
-private func handleClose() {
-    if hasUnsavedChanges {
-        showCancelAlert = true
-    } else {
-        dismiss()
     }
-}
-
-
-private func save() {
-    let viewModel = KonsultasiViewModel(modelContext: modelContext)
     
-    do {
-        if let konsultasiToEdit {
-            try viewModel.update(
-                konsultasiToEdit,
-                namaDokter: namaDokter,
-                tanggal: tanggalKonsultasi,
-                content: content)
-        } else {
-            try viewModel.addKonsultasi(
-                namaDokter: namaDokter,
-                tanggal: tanggalKonsultasi,
-                content: content)
-        }
-        dismiss()
-    } catch KonsultasiValidationError.emptyDokter {
-        errorMessage = "Nama dokter tidak boleh kosong"
-    } catch KonsultasiValidationError.emptyBody {
-        errorMessage = "Catatan tidak boleh kosong"
-    } catch {
-        errorMessage = "Terjadi kesalahan, coba lagi"
+    private func loadExistingData() {
+        guard let konsultasiToEdit else { return }
+        namaDokter = konsultasiToEdit.namaDokter
+        tanggalKonsultasi = konsultasiToEdit.tanggalKonsultasi
+        content = konsultasiToEdit.content
     }
-}
-
+    
+    private func handleClose() {
+        if hasUnsavedChanges {
+            showCancelAlert = true
+        } else {
+            dismiss()
+        }
+    }
+    
+    
+    private func save() {
+        let viewModel = KonsultasiViewModel(modelContext: modelContext)
+        
+        guard isValidDokterName(namaDokter) else {
+            print("Nama gagal validasi: '\(namaDokter)'")
+            errorMessageName = "Nama dokter tidak boleh mengandung angka atau simbol (selain titik)"
+            return
+        }
+        
+        do {
+            if let konsultasiToEdit {
+                try viewModel.update(
+                    konsultasiToEdit,
+                    namaDokter: namaDokter,
+                    tanggal: tanggalKonsultasi,
+                    content: content)
+            } else {
+                try viewModel.addKonsultasi(
+                    namaDokter: namaDokter,
+                    tanggal: tanggalKonsultasi,
+                    content: content)
+            }
+            dismiss()
+        } catch KonsultasiValidationError.emptyDokter {
+            errorMessage = "Nama dokter tidak boleh kosong"
+        } catch KonsultasiValidationError.emptyBody {
+            errorMessage = "Catatan tidak boleh kosong"
+        } catch {
+            errorMessage = "Terjadi kesalahan, coba lagi"
+        }
+    }
+    
 }
 
 
