@@ -90,13 +90,13 @@ struct PantauanListView: View {
             }
             .alert("Hapus Pantauan?", isPresented: $showDeleteAlert, presenting: pantauanToDelete) { pantauan in
                 Button("Tidak", role: .cancel) {}
+                    .tint(.black)
                 Button("Hapus", role: .destructive) {
                     viewModel.delete(pantauan)
                 }
             } message: { _ in
                 Text("Apakah Anda yakin ingin menghapus pantauan ini?")
             }
-            .tint(.black)
         }
     }
 }

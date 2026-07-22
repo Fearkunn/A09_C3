@@ -48,7 +48,6 @@ struct ObatListView: View {
                     if filteredObat.isEmpty {
                         EmptyStateView(message: "Ketuk tombol tambah untuk menambah obat")
                         Spacer()
-                            .frame(height: 100)
                     }
                     else {
                         List {
@@ -83,6 +82,7 @@ struct ObatListView: View {
             Button("Batal", role: .cancel) {
                 obatToDelete = nil
             }
+                .tint(.black)
 
             Button("Hapus", role: .destructive) {
                 if let obat = obatToDelete {
@@ -101,7 +101,6 @@ struct ObatListView: View {
         } message: {
             Text("Apakah anda yakin untuk menghapus obat ini?")
         }
-        .tint(.black)
     }
 }
 

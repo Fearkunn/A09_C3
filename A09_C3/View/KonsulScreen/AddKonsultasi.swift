@@ -56,6 +56,12 @@ struct AddKonsul: View {
         return hasUnsavedChanges
     }
     
+    func indonesianText(_ text: String) -> AttributedString {
+        var label = AttributedString(text)
+        label.setAttributes(AttributeContainer([.accessibilitySpeechLanguage: "id_ID"]))
+        return label
+    }
+    
     var body: some View {
         AddModal(
             title: modalTitle,
@@ -67,13 +73,16 @@ struct AddKonsul: View {
             Section {
                 TextField(text: $namaDokter, prompt: Text("Nama Dokter")) {
                     Text("Nama")
+                        .accessibilityLabel(Text(indonesianText("Tuliskan nama dokter")))
                 }
                 if let errorMessageName {
                     Text(errorMessageName)
                         .font(.caption)
                         .foregroundStyle(.red)
+                        .accessibilityLabel(Text(indonesianText(errorMessageName)))
                 }
                 ExpandableDatePicker(label: "Tanggal konsultasi", selection: $tanggalKonsultasi)
+                    .accessibilityLabel(Text(indonesianText("Tanggal konsultasi")))
             }
             
             Section {
@@ -85,6 +94,7 @@ struct AddKonsul: View {
                             prompt: Text("Ketik atau ketuk ikon mikrofon untuk berbicara"),
                             axis: .vertical
                         )
+                        .accessibilityLabel(Text(indonesianText("Ketik disini untuk menulis konsultasi atau ketuk mikrofon")))
                         .autocorrectionDisabled()
                         .lineLimit(8...100)
                         .padding(.trailing, 44)
@@ -95,6 +105,7 @@ struct AddKonsul: View {
                             onError: { message in errorMessage = message }
                         )
                         .padding(8)
+                        .accessibilityLabel(Text(indonesianText("Ketuk mikrofon dan mulai berbicara")))
                     }
                 }
                 
@@ -103,6 +114,7 @@ struct AddKonsul: View {
                     Text(errorMessage)
                         .font(.caption)
                         .foregroundStyle(.red)
+                        .accessibilityLabel(Text(indonesianText(errorMessage)))
                 }
             }
         }
@@ -113,10 +125,10 @@ struct AddKonsul: View {
                 dismiss()
             }
             Button("Lanjutkan Mengedit", role: .cancel) {}
+                .tint(.black)
         } message: {
             Text(cancelAlertMessage)
         }
-        .tint(.black)
     }
     
     private func loadExistingData() {
@@ -138,12 +150,6 @@ struct AddKonsul: View {
     private func save() {
         let viewModel = KonsultasiViewModel(modelContext: modelContext)
         
-        guard isValidDokterName(namaDokter) else {
-            print("Nama gagal validasi: '\(namaDokter)'")
-            errorMessageName = "Nama dokter tidak boleh mengandung angka atau simbol (selain titik)"
-            return
-        }
-        
         do {
             if let konsultasiToEdit {
                 try viewModel.update(
@@ -162,7 +168,9 @@ struct AddKonsul: View {
             errorMessage = "Nama dokter tidak boleh kosong"
         } catch KonsultasiValidationError.emptyBody {
             errorMessage = "Catatan tidak boleh kosong"
-        } catch {
+        } catch KonsultasiValidationError.namaDokterSimbol {
+            errorMessageName = "Nama dokter tidak boleh mengandung angka atau simbol (selain titik)"
+        }catch {
             errorMessage = "Terjadi kesalahan, coba lagi"
         }
     }

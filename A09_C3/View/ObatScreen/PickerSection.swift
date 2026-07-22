@@ -16,7 +16,7 @@ struct PickerSection: View {
     var dynamicLayout: AnyLayout {
         dynamicTypeSize.isAccessibilitySize
         ? AnyLayout(VStackLayout(alignment: .leading, spacing: 4))
-        : AnyLayout(HStackLayout(alignment: .top))
+        : AnyLayout(HStackLayout(alignment: .center))
     }
 
     var body: some View {

@@ -86,13 +86,13 @@ struct KonsulListView: View {
         }
         .alert("Hapus Konsultasi?", isPresented: $showDeleteAlert, presenting: konsultasiToDelete) { konsultasi in
             Button("Tidak", role: .cancel) {}
+                .tint(.black)
             Button("Hapus", role: .destructive) {
                 konsulViewModel.delete(konsultasi)
             }
         } message: { _ in
             Text("Apakah Anda yakin ingin menghapus konsultasi ini?")
         }
-        .tint(.black)
     }
 }
 

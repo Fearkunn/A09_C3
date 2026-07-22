@@ -81,10 +81,10 @@ struct AddPantauan: View {
                 dismiss()
             }
             Button("Lanjutkan Mengedit", role: .cancel) {}
+                .tint(.black)
         } message: {
             Text("Jika Anda keluar sekarang, informasi pantauan yang telah diisi tidak akan disimpan.")
         }
-        .tint(.black)
     }
     
     private func loadExistingData() {

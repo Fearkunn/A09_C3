@@ -59,6 +59,7 @@ struct ObatAddView: View {
                     .pickerStyle(.menu)
                     .labelsHidden()
                     .fixedSize()
+                    .tint(.secondary)
                 }
 
                 PickerSection(viewModel: viewModel)
@@ -91,16 +92,19 @@ struct ObatAddView: View {
                     }
                     .tint(.secondary)
                 }
-
-                // AC: If an Obat is conditional, user can toggle Kondisional to enable
-                Picker("Jenis Jadwal", selection: $viewModel.jenisJadwal) {
-                    ForEach(ObatTab.allCases) { jenis in
-                        Text(jenis.rawValue)
-                            .tag(jenis)
+                
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Waktu Minum")
+                    
+                    Picker("Jenis Jadwal", selection: $viewModel.jenisJadwal) {
+                        ForEach(ObatTab.allCases) { jenis in
+                            Text(jenis.rawValue)
+                                .tag(jenis)
+                        }
                     }
+                    .pickerStyle(.segmented)
+                    .animation(.default, value: viewModel.jenisJadwal)
                 }
-                .pickerStyle(.segmented)
-                .animation(.default, value: viewModel.jenisJadwal)
 
                 // AC: If Kondisional dipilih, user bisa isi detail kondisi
                 if viewModel.isKondisional {
@@ -119,11 +123,11 @@ struct ObatAddView: View {
                 dismiss()
             }
             Button("Lanjutkan Mengedit", role: .cancel) {}
+                .tint(.black)
         } message: {
             Text("Jika Anda keluar sekarang, informasi obat yang telah diisi tidak akan disimpan.")
         }
         .interactiveDismissDisabled(viewModel.hasUnsavedChanges)
-        .tint(.black)
     }
 }
 
