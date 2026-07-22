@@ -9,30 +9,32 @@ import SwiftUI
 
 struct ScreenHeader: View {
     var title: String
+    var icon: String = "plus"
+    var accessibilityActionLabel: String? = nil
     let addAction: () -> Void
-    
+
     func indonesianText(_ text: String) -> AttributedString {
         var label = AttributedString(text)
         label.setAttributes(AttributeContainer([.accessibilitySpeechLanguage: "id_ID"]))
         return label
     }
-    
+
     var body: some View {
         HStack {
             Text(indonesianText(title))
                 .font(.largeTitle)
                 .fontWeight(.bold)
-            
+
             Spacer()
-            
+
             Button(action: addAction) {
-                Image(systemName: "plus")
+                Image(systemName: icon)
                     .font(.system(size: 22, weight: .bold))
                     .foregroundColor(.primary)
                     .frame(width: 48, height: 48)
                     .background(Circle().fill(.cyan))
             }
-            .accessibilityLabel(Text(indonesianText("Tambah \(title)")))
+            .accessibilityLabel(Text(indonesianText(accessibilityActionLabel ?? "Tambah \(title)")))
         }
         .padding(.horizontal, 20)
     }
