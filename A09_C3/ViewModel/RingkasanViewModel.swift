@@ -54,7 +54,6 @@ final class RingkasanViewModel {
         do {
             ringkasanPantauan = try await service.generateRingkasanPantauan(catatan: catatan)
         } catch {
-            print("❌ RingkasanPantauan error: \(error)")
             errorPantauan = "Gagal membuat ringkasan pantauan: \(error.localizedDescription)"
         }
     }
@@ -72,7 +71,6 @@ final class RingkasanViewModel {
         do {
             ringkasanKonsultasi = try await service.generateRingkasanKonsultasi(catatan: catatan)
         } catch {
-            print("❌ RingkasanPantauan error: \(error)")
             errorPantauan = "Gagal membuat ringkasan pantauan: \(error.localizedDescription)"
         }
     }
