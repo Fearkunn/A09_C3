@@ -18,7 +18,7 @@ struct EditCircleButton: View {
     var body: some View {
         Button(action: action) {
             Text(title)
-                .font(.system(size: 24))
+                .font(.system(size: 20))
                 .foregroundStyle(textColor)
                 .padding(.horizontal, 14)
                 .padding(.vertical, 10)
