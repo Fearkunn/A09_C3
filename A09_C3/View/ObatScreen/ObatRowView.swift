@@ -5,20 +5,39 @@
 //  Created by Muhammad Dzakki Abdullah on 18/07/26.
 //
 
+//
+//  ObatRowView.swift
+//  A09_C3
+//
+//  Created by Muhammad Dzakki Abdullah on 18/07/26.
+//
+
 import SwiftUI
 
 struct ObatRowView: View {
-
+    
     let obat: Obat
-
+    var keyword: String? = nil
+    
+    private func highlighted(_ text: String) -> AttributedString {
+        var attributed = AttributedString(text)
+        guard let keyword, !keyword.isEmpty,
+              let range = attributed.range(of: keyword, options: .caseInsensitive) else {
+            return attributed
+        }
+        attributed[range].font = .body.bold()
+        attributed[range].backgroundColor = .yellow.opacity(0.4)
+        return attributed
+    }
+    
     var body: some View {
         VStack(alignment: .leading) {
-
+            
             HStack(alignment: .top) {
                 
                 VStack(alignment: .leading, spacing: 4) {
                     
-                    Text(obat.nama)
+                    Text(highlighted(obat.nama))
                         .font(.body)
                     
                     Text(obat.frekuensi)
@@ -47,13 +66,13 @@ struct ObatRowView: View {
                         case .sirup: return "\(obat.dosis) ml"
                         }
                     }())
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                        .multilineTextAlignment(.trailing)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.trailing)
                 }
             }
         }
-//        .padding(.vertical)
+        //        .padding(.vertical)
         .contentShape(Rectangle())
     }
 }
@@ -66,7 +85,10 @@ struct ObatRowView: View {
         frekuensi: "3 × sehari 1 tablet",
         keterangan: .sebelumMakan
     )
-
-    ObatRowView(obat: obat)
-        .padding()
+    
+    VStack {
+        ObatRowView(obat: obat)
+        ObatRowView(obat: obat, keyword: "para")
+    }
+    .padding()
 }

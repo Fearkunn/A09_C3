@@ -25,7 +25,7 @@ struct SearchResultRowView: View {
         
         if case let .obat(obat) = item.destination {
             
-            ObatRowView(obat: obat)
+            ObatRowView(obat: obat, keyword: keyword)
             
         } else {
             
