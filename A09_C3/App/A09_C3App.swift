@@ -25,9 +25,13 @@ struct A09_C3App: App {
         }
     }()
 
+    @State private var translationBridge = TranslationBridge()
+    
     var body: some Scene {
         WindowGroup {
             MainTabView()
+                .environment(translationBridge)
+                .overlay(TranslationHostView(bridge: translationBridge))
         }
         .modelContainer(sharedModelContainer)
     }

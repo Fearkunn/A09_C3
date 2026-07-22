@@ -6,3 +6,13 @@
 //
 
 import Foundation
+import FoundationModels
+
+@Generable
+struct RingkasanPantauan {
+    @Guide(description: "Ringkasan tren kondisi pasien dari data pantauan dalam 2-3 kalimat, bahasa mudah dipahami")
+    var ringkasan: String
+
+    @Guide(description: "Poin perubahan penting yang terpantau, maksimal 4 poin")
+    var poinPenting: [String]
+}
