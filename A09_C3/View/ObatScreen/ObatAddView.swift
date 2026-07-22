@@ -59,6 +59,7 @@ struct ObatAddView: View {
                     .pickerStyle(.menu)
                     .labelsHidden()
                     .fixedSize()
+                    .tint(.secondary)
                 }
 
                 PickerSection(viewModel: viewModel)
@@ -119,11 +120,11 @@ struct ObatAddView: View {
                 dismiss()
             }
             Button("Lanjutkan Mengedit", role: .cancel) {}
+                .tint(.black)
         } message: {
             Text("Jika Anda keluar sekarang, informasi obat yang telah diisi tidak akan disimpan.")
         }
         .interactiveDismissDisabled(viewModel.hasUnsavedChanges)
-        .tint(.black)
     }
 }
 

@@ -38,7 +38,7 @@ struct KonsulDetailView: View {
                 HStack {
                     CircleIconButton(
                         systemName: "chevron.left",
-                        iconColor: .black,
+                        iconColor: .primary,
                         backgroundColor: Color(.tertiarySystemFill),
                         action: { dismiss() }
                     )

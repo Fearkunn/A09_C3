@@ -16,8 +16,8 @@ struct ExpandableDatePicker: View {
     
     var dynamicLayout: AnyLayout {
         dynamicTypeSize.isAccessibilitySize
-        ? AnyLayout(VStackLayout(alignment: .leading, spacing: 4))
-        : AnyLayout(HStackLayout(alignment: .top))
+        ? AnyLayout(VStackLayout(alignment: .leading))
+        : AnyLayout(HStackLayout(alignment: .center))
     }
     
     private var formattedDate: String {

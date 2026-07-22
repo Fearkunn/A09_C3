@@ -11,6 +11,7 @@ import SwiftData
 enum KonsultasiValidationError: Error {
     case emptyDokter
     case emptyBody
+    case namaDokterSimbol
 }
 
 class KonsultasiViewModel {
