@@ -11,9 +11,9 @@ import SwiftData
 struct SearchView: View {
     @Environment(\.modelContext) private var modelContext
     @Binding var searchText: String
+    let historyStore: SearchHistoryStore
     @State private var viewModel: SearchViewModel?
     
-    @State private var selectedObat: Obat?
     @State private var selectedPantauan: PantauanModel?
     @State private var selectedKonsul: KonsulModel?
     
@@ -45,21 +45,15 @@ struct SearchView: View {
             
             if let viewModel {
                 VStack(alignment: .leading, spacing: 0) {
-                    
                     header
-                    
                     content(viewModel: viewModel)
                 }
             }
         }
         .onAppear {
             if viewModel == nil {
-                viewModel = SearchViewModel(modelContext: modelContext)
+                viewModel = SearchViewModel(modelContext: modelContext, historyStore: historyStore)
             }
-        }
-        .onSubmit(of: .search) {
-            guard !trimmedQuery.isEmpty else { return }
-            viewModel?.commitSearch(trimmedQuery)
         }
         .navigationDestination(item: $selectedPantauan) { pantauan in
             PantauanDetailView(pantauan: pantauan)
@@ -85,19 +79,19 @@ struct SearchView: View {
     
     @ViewBuilder
     private func historySection(viewModel: SearchViewModel) -> some View {
-        if viewModel.historyStore.items.isEmpty {
+        if historyStore.items.isEmpty {
             Color.clear
         } else {
             List {
                 Section("Riwayat") {
-                    ForEach(viewModel.historyStore.items) { item in
+                    ForEach(historyStore.items) { item in
                         SearchHistoryRowView(
                             item: item,
                             onSelect: {
-                                searchText = viewModel.selectHistory(item)
+                                searchText = item.query
                             },
                             onDelete: {
-                                viewModel.historyStore.remove(item)
+                                historyStore.remove(item)
                             }
                         )
                     }
@@ -132,8 +126,8 @@ struct SearchView: View {
     
     private func handleSelection(_ item: SearchResultItem) {
         switch item.destination {
-        case .obat(let obat):
-            selectedObat = obat
+        case .obat:
+            break
         case .pantauan(let pantauan):
             selectedPantauan = pantauan
         case .konsul(let konsul):
@@ -146,7 +140,7 @@ struct SearchView: View {
     @Previewable @State var text = ""
     
     NavigationStack {
-        SearchView(searchText: $text)
+        SearchView(searchText: $text, historyStore: SearchHistoryStore())
             .searchable(text: $text)
     }
     .modelContainer(for: [Obat.self, PantauanModel.self, KonsulModel.self], inMemory: true)

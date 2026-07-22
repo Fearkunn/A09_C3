@@ -14,7 +14,7 @@ final class SearchViewModel {
     private let modelContext: ModelContext
     let historyStore: SearchHistoryStore
     
-    init(modelContext: ModelContext, historyStore: SearchHistoryStore = SearchHistoryStore()) {
+    init(modelContext: ModelContext, historyStore: SearchHistoryStore) {
         self.modelContext = modelContext
         self.historyStore = historyStore
     }
@@ -29,14 +29,6 @@ final class SearchViewModel {
             (.pantauan, pantauanResults),
             (.konsultasi, konsulResults)
         ].filter { !$0.items.isEmpty }
-    }
-    
-    func commitSearch(_ query: String) {
-        historyStore.add(query: query)
-    }
-    
-    func selectHistory(_ item: SearchHistoryItem) -> String {
-        item.query
     }
     
     func searchObat(matching keyword: String) -> [SearchResultItem] {

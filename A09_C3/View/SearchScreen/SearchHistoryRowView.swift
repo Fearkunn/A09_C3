@@ -11,37 +11,40 @@ struct SearchHistoryRowView: View {
     let item: SearchHistoryItem
     let onSelect: () -> Void
     let onDelete: () -> Void
-
+    
     private var relativeDate: String {
         let formatter = RelativeDateTimeFormatter()
         formatter.locale = Locale(identifier: "id_ID")
         formatter.unitsStyle = .full
         return formatter.localizedString(for: item.searchedAt, relativeTo: .now)
     }
-
+    
     var body: some View {
         HStack {
-            Image(systemName: "clock")
-                .foregroundStyle(.secondary)
-
-            VStack(alignment: .leading, spacing: 2) {
-                Text(item.query)
-                    .foregroundStyle(.primary)
-                Text(relativeDate)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+            Button(action: onSelect) {
+                HStack {
+                    Image(systemName: "clock.arrow.trianglehead.counterclockwise.rotate.90")
+                        .foregroundStyle(.secondary)
+                    
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(item.query)
+                            .foregroundStyle(.primary)
+                        Text(relativeDate)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
             }
-
+            .buttonStyle(.plain)
+            
             Spacer()
-
+            
             Button(action: onDelete) {
-                Image(systemName: "xmark.circle.fill")
-                    .foregroundStyle(.tertiary)
+                Image(systemName: "xmark")
+                    .foregroundStyle(.gray)
             }
             .buttonStyle(.borderless)
         }
-        .contentShape(Rectangle())
-        .onTapGesture(perform: onSelect)
     }
 }
 

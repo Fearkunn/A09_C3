@@ -52,10 +52,6 @@ struct SearchResultRowView: View {
                     .foregroundStyle(.tertiary)
                 
             }
-            .padding(.horizontal, 8)
-            .background(Color(.systemBackground))
-            .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
-            
         }
     }
 }
