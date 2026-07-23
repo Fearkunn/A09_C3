@@ -56,12 +56,6 @@ struct AddKonsul: View {
         return hasUnsavedChanges
     }
     
-    func indonesianText(_ text: String) -> AttributedString {
-        var label = AttributedString(text)
-        label.setAttributes(AttributeContainer([.accessibilitySpeechLanguage: "id_ID"]))
-        return label
-    }
-    
     var body: some View {
         AddModal(
             title: modalTitle,
@@ -71,6 +65,7 @@ struct AddKonsul: View {
                 save() }
         ) {
             Section {
+                
                 TextField(text: $namaDokter, prompt: Text("Nama Dokter")) {
                     Text("Nama")
                         .accessibilityLabel(Text(indonesianText("Tuliskan nama dokter")))
@@ -121,11 +116,17 @@ struct AddKonsul: View {
         
         .onAppear(perform: loadExistingData)
         .alert(cancelAlertTitle, isPresented: $showCancelAlert) {
-            Button("Batalkan", role: .destructive) {
-                dismiss()
+            Group {
+                Button("Batalkan", role: .destructive) {
+                    dismiss()
+                }
+                .accessibilityLabel(Text(indonesianText("Batalkan penambahan obat")))
+                .accessibilityHint(Text(indonesianText("Keluar tanpa menyimpan perubahan")))
+                Button("Lanjutkan Mengedit", role: .cancel) {}
+                    .accessibilityLabel(Text(indonesianText("Lanjutkan mengedit")))
+                    .accessibilityHint(Text(indonesianText("Kembali pada halaman tanpa menghapus data")))
             }
-            Button("Lanjutkan Mengedit", role: .cancel) {}
-                .tint(.black)
+            .tint(.black)
         } message: {
             Text(cancelAlertMessage)
         }

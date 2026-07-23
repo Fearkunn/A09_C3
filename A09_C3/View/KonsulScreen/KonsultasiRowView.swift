@@ -10,6 +10,13 @@ import SwiftUI
 struct KonsulRowView: View {
     let konsul: KonsulModel
     
+    private var formattedDate: String {
+        konsul.tanggalKonsultasi.formatted(
+            .dateTime.day().month(.wide).year()
+            .locale(Locale(identifier: "id_ID"))
+        )
+    }
+    
     var body: some View {
         NavigationLink {
             KonsulDetailView(konsultasi: konsul)
@@ -25,6 +32,12 @@ struct KonsulRowView: View {
             }
             .padding(1)
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(
+            Text(indonesianText("Konsultasi dengan \(konsul.namaDokter), tanggal \(formattedDate)"))
+        )
+        .accessibilityHint(Text(indonesianText("Ketuk dua kali untuk melihat detail konsultasi")))
+        .accessibilityAddTraits(.isButton)
     }
 }
 

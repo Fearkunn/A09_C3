@@ -4,6 +4,7 @@ import SwiftData
 struct ObatListView: View {
 
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Query(sort: \Obat.createdAt, order: .reverse)
     private var allObat: [Obat]
 
@@ -42,9 +43,15 @@ struct ObatListView: View {
                         }
                     }
                     .pickerStyle(.segmented)
+                    .animation(
+                        reduceMotion ? nil : .default,
+                        value: selectedTab
+                    )
                     .padding(.horizontal)
+                    .accessibilityLabel(Text(indonesianText("Filter obat")))
+                    .accessibilityValue(Text(indonesianText(selectedTab.rawValue)))
                     Spacer()
-
+                    
                     if filteredObat.isEmpty {
                         EmptyStateView(message: "Ketuk tombol tambah untuk menambah obat")
                         Spacer()
@@ -62,6 +69,9 @@ struct ObatListView: View {
                                                 Label("Hapus", systemImage: "trash")
                                             }
                                             .tint(.red)
+                                            .accessibilityLabel(
+                                                Text(indonesianText("Hapus obat \(obat.nama)"))
+                                            )
                                         }
                                 }
                             }
@@ -83,6 +93,7 @@ struct ObatListView: View {
                 obatToDelete = nil
             }
                 .tint(.black)
+                .accessibilityLabel(Text(indonesianText("Batal, jangan hapus obat")))
 
             Button("Hapus", role: .destructive) {
                 if let obat = obatToDelete {
@@ -93,11 +104,14 @@ struct ObatListView: View {
                     } catch {
                         print("Gagal menghapus obat: \(error)")
                     }
-
+                    
                     obatToDelete = nil
                 }
             }
-
+            .accessibilityLabel(
+                Text(indonesianText("Hapus obat \(obatToDelete?.nama ?? "")"))
+            )
+            
         } message: {
             Text("Apakah anda yakin untuk menghapus obat ini?")
         }
