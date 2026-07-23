@@ -63,6 +63,8 @@ struct KonsulListView: View {
                                                     Label("Hapus", systemImage: "trash")
                                                 }
                                                 .tint(.red)
+                                                .accessibilityLabel(Text(indonesianText("Hapus konsultasi dengan \(konsul.namaDokter)"))
+                                                )
                                             }
                                     }
                                 } header: {
@@ -70,6 +72,9 @@ struct KonsulListView: View {
                                         .font(.subheadline)
                                         .fontWeight(.semibold)
                                         .foregroundColor(.secondary)
+                                        .accessibilityLabel(
+                                            Text(indonesianText("Kelompok bulan \(group.key)"))
+                                        )
                                 }
                             }
                         }
