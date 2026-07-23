@@ -27,25 +27,32 @@ struct RingkasanView: View {
                     ScrollView {
                         VStack(spacing: 16) {
                             if !viewModel.isModelAvailable {
-                                Text("Apple Intelligence belum aktif di perangkat ini. Aktifkan lewat Settings untuk memakai fitur ringkasan.")
+                                Text("Apple Intelligence belum aktif di perangkat ini. Aktifkan melalui Settings untuk memakai fitur ringkasan.")
                                     .font(.caption)
-                                    .foregroundStyle(.orange)
+                                    .foregroundStyle(.secondary)
                                     .padding()
                             }
 
-                            RingkasanPantauanCard(
-                                ringkasan: viewModel.ringkasanPantauan,
+                            RingkasanSectionView(
+                                title: "Pantauan",
+                                lastUpdated: viewModel.lastUpdatedPantauan,
+                                poinPenting: viewModel.poinPantauan,
                                 isGenerating: viewModel.isGeneratingPantauan,
                                 error: viewModel.errorPantauan
                             )
 
-                            RingkasanKonsultasiCard(
-                                ringkasan: viewModel.ringkasanKonsultasi,
+                            RingkasanSectionView(
+                                title: "Konsultasi",
+                                lastUpdated: viewModel.lastUpdatedKonsultasi,
+                                poinPenting: viewModel.poinKonsultasi,
                                 isGenerating: viewModel.isGeneratingKonsultasi,
                                 error: viewModel.errorKonsultasi
                             )
+                            Text("Informasi yang dirangkum AI dapat mengandung kesalahan atau ketidakakuratan. Selalu periksa kembali informasi penting dan ikuti arahan tenaga kesehatan.")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
                         }
-                        .padding()
+                        .padding(.horizontal,20)
                     }
                     .refreshable {
                         await viewModel.generateSemuaRingkasan(
@@ -63,13 +70,7 @@ struct RingkasanView: View {
                 let service = RingkasanService(translationBridge: translationBridge)
                 let newViewModel = RingkasanViewModel(service: service)
                 viewModel = newViewModel
-
-                Task {
-                    await newViewModel.generateSemuaRingkasan(
-                        pantauanList: pantauanList,
-                        konsulList: konsulList
-                    )
-                }
+                newViewModel.loadCachedDisplay(pantauanList: pantauanList, konsulList: konsulList)
             }
         }
     }

@@ -13,10 +13,6 @@ import Observation
 final class RingkasanService {
     private let translationBridge: TranslationBridge
 
-    // Separator dipakai untuk gabung & pisah teks saat batch translate.
-    // Harus konsisten dipakai di semua tempat supaya parsing balik tidak meleset.
-    private let separator = "\n===\n"
-
     init(translationBridge: TranslationBridge) {
         self.translationBridge = translationBridge
     }
@@ -25,123 +21,67 @@ final class RingkasanService {
         SystemLanguageModel.default.availability == .available
     }
 
-    func generateRingkasanPantauan(catatan: [String]) async throws -> RingkasanPantauan {
-        let gabunganEN = try await translationBridge.translate(
-            catatan.joined(separator: separator),
+    // Satu catatan -> satu poin ringkasan
+    func generatePoinPantauan(catatan: String) async throws -> String {
+        let catatanEN = try await translationBridge.translate(
+            catatan,
             from: Locale.Language(identifier: "id"),
             to: Locale.Language(identifier: "en")
         )
 
         let instructions = Instructions("""
-            You are a caregiver assistant. Rephrase the following patient monitoring notes \
-            in simpler words, focusing on trends and changes over time.
+            You are a caregiver assistant. Rephrase the following single patient monitoring note \
+            in simpler words, as ONE short sentence.
             """)
 
         let session = LanguageModelSession(instructions: instructions)
         let prompt = """
-            \(gabunganEN)
+            \(catatanEN)
 
-            Format your response EXACTLY like this, with no extra text:
-            SUMMARY: <2-3 sentence summary>
-            POINTS:
-            - <point 1>
-            - <point 2>
-            - <point 3>
+            Respond with ONLY one short sentence summarizing this note. No prefix, no label, no extra text.
             """
 
         let response = try await session.respond(to: prompt)
-        let hasilEN = response.content
+        let poinEN = response.content.trimmingCharacters(in: .whitespacesAndNewlines)
 
-        let (ringkasanEN, poinEN) = parseFreeformResponse(hasilEN)
-
-        let gabunganHasilEN = ([ringkasanEN] + poinEN).joined(separator: separator)
-        let gabunganHasilID = try await translationBridge.translate(
-            gabunganHasilEN,
+        let poinID = try await translationBridge.translate(
+            poinEN,
             from: Locale.Language(identifier: "en"),
             to: Locale.Language(identifier: "id")
         )
 
-        let bagianID = gabunganHasilID.components(separatedBy: separator)
-        let ringkasanID = bagianID.first ?? ringkasanEN
-        let poinID = Array(bagianID.dropFirst())
-
-        return RingkasanPantauan(ringkasan: ringkasanID, poinPenting: poinID)
+        return poinID.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
-    func generateRingkasanKonsultasi(catatan: [String]) async throws -> RingkasanKonsultasi {
-        let gabunganEN = try await translationBridge.translate(
-            catatan.joined(separator: separator),
+    // Satu catatan konsultasi -> satu poin ringkasan
+    func generatePoinKonsultasi(catatan: String) async throws -> String {
+        let catatanEN = try await translationBridge.translate(
+            catatan,
             from: Locale.Language(identifier: "id"),
             to: Locale.Language(identifier: "en")
         )
 
         let instructions = Instructions("""
-            You are a caregiver assistant. Rephrase the following medical consultation notes \
-            in simpler words, focusing on what was discussed during the visit.
+            You are a caregiver assistant. Rephrase the following single medical consultation note \
+            in simpler words, as ONE short sentence.
             """)
 
         let session = LanguageModelSession(instructions: instructions)
         let prompt = """
-            \(gabunganEN)
+            \(catatanEN)
 
-            Format your response EXACTLY like this, with no extra text:
-            SUMMARY: <2-3 sentence summary>
-            POINTS:
-            - <point 1>
-            - <point 2>
-            - <point 3>
+            Respond with ONLY one short sentence summarizing this note. No prefix, no label, no extra text.
             """
 
         let response = try await session.respond(to: prompt)
-        let hasilEN = response.content
+        let poinEN = response.content.trimmingCharacters(in: .whitespacesAndNewlines)
 
-        let (ringkasanEN, poinEN) = parseFreeformResponse(hasilEN)
-
-        let gabunganHasilEN = ([ringkasanEN] + poinEN).joined(separator: separator)
-        let gabunganHasilID = try await translationBridge.translate(
-            gabunganHasilEN,
+        let poinID = try await translationBridge.translate(
+            poinEN,
             from: Locale.Language(identifier: "en"),
             to: Locale.Language(identifier: "id")
         )
 
-        let bagianID = gabunganHasilID.components(separatedBy: separator)
-        let ringkasanID = bagianID.first ?? ringkasanEN
-        let poinID = Array(bagianID.dropFirst())
-
-        return RingkasanKonsultasi(ringkasan: ringkasanID, poinPenting: poinID)
-    }
-
-    // MARK: - Parsing Helper
-    // Parse format teks bebas "SUMMARY: ... / POINTS: - ..." jadi (ringkasan, [poin]).
-    // Dipakai untuk MENGHINDARI @Generable karena guided generation terbukti
-    // memicu refusal guardrail untuk konten kesehatan, sedangkan teks bebas tidak.
-    private func parseFreeformResponse(_ text: String) -> (ringkasan: String, poin: [String]) {
-        var ringkasan = ""
-        var poin: [String] = []
-
-        let lines = text.components(separatedBy: .newlines)
-        var isInPoints = false
-
-        for line in lines {
-            let trimmed = line.trimmingCharacters(in: .whitespaces)
-            if trimmed.hasPrefix("SUMMARY:") {
-                ringkasan = trimmed.replacingOccurrences(of: "SUMMARY:", with: "").trimmingCharacters(in: .whitespaces)
-            } else if trimmed.hasPrefix("POINTS:") {
-                isInPoints = true
-            } else if isInPoints, trimmed.hasPrefix("-") {
-                let poinBersih = trimmed.dropFirst().trimmingCharacters(in: .whitespaces)
-                if !poinBersih.isEmpty {
-                    poin.append(poinBersih)
-                }
-            }
-        }
-
-        // Fallback: kalau parsing gagal total (model tidak ikuti format),
-        // treat seluruh response sebagai ringkasan, poin dikosongkan
-        if ringkasan.isEmpty && poin.isEmpty {
-            ringkasan = text.trimmingCharacters(in: .whitespacesAndNewlines)
-        }
-
-        return (ringkasan, poin)
+        return poinID.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 }
