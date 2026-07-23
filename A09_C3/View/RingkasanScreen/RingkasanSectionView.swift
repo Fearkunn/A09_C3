@@ -32,7 +32,7 @@ struct RingkasanSectionView: View {
                 } else if let error {
                     Text(error)
                         .font(.subheadline)
-                        .foregroundStyle(.red)
+                        .foregroundStyle(.secondary)
                 } else if poinPenting.isEmpty {
                     Text("Belum ada ringkasan")
                         .font(.subheadline)
@@ -51,7 +51,7 @@ struct RingkasanSectionView: View {
             }
             .padding()
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(Color(.systemBackground), in: RoundedRectangle(cornerRadius: 16))
+            .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 16))
         }
     }
 }
