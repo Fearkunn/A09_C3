@@ -13,12 +13,6 @@ struct ScreenHeader: View {
     var accessibilityActionLabel: String? = nil
     let addAction: () -> Void
 
-    func indonesianText(_ text: String) -> AttributedString {
-        var label = AttributedString(text)
-        label.setAttributes(AttributeContainer([.accessibilitySpeechLanguage: "id_ID"]))
-        return label
-    }
-
     var body: some View {
         HStack {
             Text(indonesianText(title))

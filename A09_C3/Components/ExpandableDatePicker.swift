@@ -11,6 +11,7 @@ struct ExpandableDatePicker: View {
     let label: String
     @Binding var selection: Date
     @Environment(\.dynamicTypeSize) var dynamicTypeSize
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     
     @State private var isExpanded = false
     
@@ -29,8 +30,12 @@ struct ExpandableDatePicker: View {
     
     var body: some View {
         Button {
-            withAnimation(.easeOut(duration: 0.2)) {
+            if reduceMotion {
                 isExpanded.toggle()
+            } else {
+                withAnimation(.easeOut(duration: 0.2)) {
+                    isExpanded.toggle()
+                }
             }
         } label: {
             HStack {
@@ -46,11 +51,19 @@ struct ExpandableDatePicker: View {
                         .padding(.vertical, 6)
                         .background(Color.gray.opacity(0.16))
                         .clipShape(Capsule())
-                        .animation(nil, value: isExpanded)
+                        .animation(
+                            reduceMotion ? nil : .easeOut(duration: 0.2),
+                            value: isExpanded
+                        )
                 }
             }
         }
         .buttonStyle(.plain)
+        .accessibilityElement(children: .ignore)
+            .accessibilityLabel(label)
+            .accessibilityValue(accessibleFormattedDate)
+            .accessibilityHint(isExpanded ? "Ketuk dua kali untuk menutup kalender" : "Ketuk dua kali untuk membuka kalender")
+            .accessibilityAddTraits(isExpanded ? [.isButton] : [.isButton])
         
         if isExpanded {
             DatePicker(
@@ -64,5 +77,12 @@ struct ExpandableDatePicker: View {
             .tint(.cyan)
             .transition(.opacity.combined(with: .move(edge: .top)))
         }
+    }
+    // Format khusus untuk VoiceOver: bulan lengkap, bukan singkatan
+    private var accessibleFormattedDate: String {
+        selection.formatted(
+            .dateTime.day().month(.wide).year()
+            .locale(Locale(identifier: "id_ID"))
+        )
     }
 }

@@ -13,6 +13,7 @@ struct ObatAddView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     @Environment(\.dynamicTypeSize) var dynamicTypeSize
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     
     var dynamicLayout: AnyLayout {
         dynamicTypeSize.isAccessibilitySize
@@ -42,6 +43,7 @@ struct ObatAddView: View {
         ) {
             Section {
                 TextField("Tambahkan Nama Obat", text: $viewModel.nama)
+                    .accessibilityLabel(Text(indonesianText("Tulis nama obat disini")))
                 if viewModel.attemptedSave && viewModel.nama.trimmingCharacters(in: .whitespaces).isEmpty {
                     Text("Nama obat wajib diisi")
                         .font(.caption)
@@ -57,11 +59,19 @@ struct ObatAddView: View {
                         }
                     }
                     .pickerStyle(.menu)
+                    .animation(
+                        reduceMotion ? nil : .default,
+                        value: selectedTab
+                    )
                     .labelsHidden()
                     .fixedSize()
                     .tint(.secondary)
                 }
-
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(Text(indonesianText("Jenis obat")))
+                .accessibilityValue(Text(indonesianText(viewModel.jenis.rawValue)))
+                .accessibilityHint(Text(indonesianText("Ketuk dua kali untuk memilih jenis obat")))
+                
                 PickerSection(viewModel: viewModel)
                 
                 HStack {
@@ -74,6 +84,8 @@ struct ObatAddView: View {
                             }
                             .multilineTextAlignment(.trailing)
                             .foregroundStyle(.secondary)
+                            .accessibilityLabel(Text(indonesianText("Dosis obat")))
+                            .accessibilityValue(Text(indonesianText("\(viewModel.dosis) \(viewModel.satuanDosis)")))
                         
                         Text(viewModel.satuanDosis)
                             .foregroundStyle(.secondary)
@@ -90,10 +102,16 @@ struct ObatAddView: View {
                     ForEach(KeteranganObat.allCases) { keterangan in
                         Text(keterangan.rawValue).tag(keterangan)
                     }
-                    .tint(.secondary)
                 }
+                .tint(.secondary)
+                .animation(
+                    reduceMotion ? nil : .default,
+                    value: selectedTab
+                )
+                .accessibilityLabel(Text(indonesianText("Keterangan")))
+                .accessibilityValue(Text(indonesianText(viewModel.keterangan.rawValue)))
                 
-                VStack(alignment: .leading, spacing: 4) {
+                VStack(alignment: .leading, spacing: 15) {
                     Text("Waktu Minum")
                     
                     Picker("Jenis Jadwal", selection: $viewModel.jenisJadwal) {
@@ -101,19 +119,27 @@ struct ObatAddView: View {
                             Text(jenis.rawValue)
                                 .tag(jenis)
                         }
+                        .tint(.secondary)
                     }
                     .pickerStyle(.segmented)
-                    .animation(.default, value: viewModel.jenisJadwal)
+                    .animation(
+                        reduceMotion ? nil : .default,
+                        value: viewModel.jenisJadwal
+                    )
+                    .accessibilityLabel(Text(indonesianText("Jenis jadwal minum obat")))
+
                 }
 
                 // AC: If Kondisional dipilih, user bisa isi detail kondisi
                 if viewModel.isKondisional {
                     TextField("Detail kondisi (cth: saat demam)", text: $viewModel.kondisiDetail)
+                        .accessibilityLabel(Text(indonesianText("Detail kondisi obat kondisional. Contoh: saat demam")))
 
                     if viewModel.attemptedSave && viewModel.kondisiDetail.trimmingCharacters(in: .whitespaces).isEmpty {
                         Text("Detail kondisi wajib diisi")
                             .font(.caption)
                             .foregroundStyle(.red)
+                            .accessibilityLabel(Text(indonesianText("Detail kondisi wajib diisi")))
                     }
                 }
             }
@@ -122,8 +148,12 @@ struct ObatAddView: View {
             Button("Batalkan", role: .destructive) {
                 dismiss()
             }
+            .accessibilityLabel(Text(indonesianText("Batalkan penambahan obat")))
+            .accessibilityHint(Text(indonesianText("Keluar tanpa menyimpan perubahan")))
             Button("Lanjutkan Mengedit", role: .cancel) {}
                 .tint(.black)
+                .accessibilityLabel(Text(indonesianText("Lanjutkan mengedit")))
+                .accessibilityHint(Text(indonesianText("Kembali pada halaman tanpa menghapus data")))
         } message: {
             Text("Jika Anda keluar sekarang, informasi obat yang telah diisi tidak akan disimpan.")
         }

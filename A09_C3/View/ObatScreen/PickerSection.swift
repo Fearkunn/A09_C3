@@ -12,6 +12,7 @@ import SwiftUI
 struct PickerSection: View {
     @Bindable var viewModel: ObatAddViewModel
     @Environment(\.dynamicTypeSize) var dynamicTypeSize
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     
     var dynamicLayout: AnyLayout {
         dynamicTypeSize.isAccessibilitySize
@@ -28,16 +29,24 @@ struct PickerSection: View {
                     title: "\(viewModel.jumlahPerHari) kali sehari",
                     isSelected: viewModel.activeChip == .jumlahPerHari && viewModel.isPickerExpanded
                 ) {
-                    withAnimation {
+                    if reduceMotion {
                         viewModel.selectFrekuensiChip(.jumlahPerHari)
+                    } else {
+                        withAnimation {
+                            viewModel.selectFrekuensiChip(.jumlahPerHari)
+                        }
                     }
                 }
                 FrekuensiChipButton(
                     title: "\(viewModel.jumlahPerKali) \(viewModel.satuanJumlah)",
                     isSelected: viewModel.activeChip == .jumlahPerKali && viewModel.isPickerExpanded
                 ) {
-                    withAnimation {
+                    if reduceMotion {
                         viewModel.selectFrekuensiChip(.jumlahPerKali)
+                    } else {
+                        withAnimation {
+                            viewModel.selectFrekuensiChip(.jumlahPerKali)
+                        }
                     }
                 }
             }

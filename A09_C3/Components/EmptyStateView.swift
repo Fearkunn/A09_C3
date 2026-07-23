@@ -28,7 +28,7 @@ struct EmptyStateView: View {
                 .font(.system(size: 110, weight: .semibold))
                 .foregroundStyle(.secondary)
             
-            Text(indonesianText("Belum ada data"))
+            Text("Belum ada data")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
             
@@ -40,6 +40,7 @@ struct EmptyStateView: View {
         .padding(.horizontal, 32)
         .frame(maxWidth: .infinity)
         .accessibilityElement(children: .combine)
+        .accessibilityLabel(Text(indonesianText(message)))
     }
 }
 

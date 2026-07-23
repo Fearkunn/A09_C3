@@ -77,11 +77,13 @@ struct AddPantauan: View {
         }
         .onAppear(perform: loadExistingData)
         .alert("Batalkan penambahan pantauan?", isPresented: $showCancelAlert) {
-            Button("Batalkan", role: .destructive) {
-                dismiss()
+            Group {
+                Button("Batalkan", role: .destructive) {
+                    dismiss()
+                }
+                Button("Lanjutkan Mengedit", role: .cancel) {}
             }
-            Button("Lanjutkan Mengedit", role: .cancel) {}
-                .tint(.black)
+            .tint(.black)
         } message: {
             Text("Jika Anda keluar sekarang, informasi pantauan yang telah diisi tidak akan disimpan.")
         }
