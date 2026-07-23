@@ -8,10 +8,9 @@
 import SwiftUI
 
 struct PantauanDetailView: View {
-    @Environment(\.dismiss) private var dismiss
     @Environment(\.dynamicTypeSize) var dynamicTypeSize
     
-    var dynamicLayout: AnyLayout{
+    var dynamicLayout: AnyLayout {
         dynamicTypeSize.isAccessibilitySize ? AnyLayout(VStackLayout(alignment: .leading)) : AnyLayout(HStackLayout(alignment: .top))
     }
     
@@ -21,71 +20,49 @@ struct PantauanDetailView: View {
     
     private var formattedDate: String {
         pantauan.pantauanDate.formatted(
-            .dateTime
-                .day()
-                .month(.wide)
-                .year()
-                .locale(Locale(identifier: "id_ID"))
+            .dateTime.day().month(.wide).year().locale(Locale(identifier: "id_ID"))
         )
     }
     
     var body: some View {
-        ZStack {
-            Color("backgroundColor")
-                .ignoresSafeArea()
-            
-            VStack(spacing: 16) {
-                HStack {
-                    CircleIconButton(
-                        systemName: "chevron.left",
-                        iconColor: .primary,
-                        backgroundColor: Color(.tertiarySystemFill),
-                        action: { dismiss() }
-                    )
-                    
-                    Spacer()
-                    
-                    EditCircleButton(
-                        title: "Edit",
-                        textColor: .primary,
-                        backgroundColor: Color(.tertiarySystemFill),
-                        action: { showEditSheet = true }
-                    )
-                    .accessibilityLabel("Edit Pantauan")
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                dynamicLayout {
+                    Text("Tanggal pantauan")
+                        .foregroundStyle(.secondary)
+                    if !dynamicTypeSize.isAccessibilitySize {
+                        Spacer()
+                    }
+                    Text(formattedDate)
                 }
-                .padding(.horizontal, 20)
-                .padding(.top, 20)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding()
+                .background(Color(.secondarySystemGroupedBackground))
+                .clipShape(RoundedRectangle(cornerRadius: 12))
                 
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 16) {
-                        dynamicLayout {
-                            Text("Tanggal pantauan")
-                                .foregroundStyle(.secondary)
-                            if !dynamicTypeSize.isAccessibilitySize {
-                                Spacer()
-                            }
-                            Text(formattedDate)
-                        }
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                dynamicLayout {
+                    Text(pantauan.pantauanBody)
                         .padding()
+                        .frame(maxWidth: .infinity, minHeight: 200, alignment: .topLeading)
                         .background(Color(.secondarySystemGroupedBackground))
                         .clipShape(RoundedRectangle(cornerRadius: 12))
-                        
-                        dynamicLayout{
-                            Text(pantauan.pantauanBody)
-                                .padding()
-                                .frame(maxWidth: .infinity, minHeight: 200, alignment: .topLeading)
-                                .background(Color(.secondarySystemGroupedBackground))
-                                .clipShape(RoundedRectangle(cornerRadius: 12))
-                            
-                            Spacer()
-                        }
-                    }
-                    .padding(.horizontal, 20)
                 }
             }
+            .padding(.horizontal, 20)
+            .padding(.top, 16)
         }
-        .navigationBarHidden(true)
+        .background(Color("backgroundColor"))
+        .navigationTitle("Detail Pantauan")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button("Edit") {
+                    showEditSheet = true
+                }
+                .foregroundStyle(.primary)
+                .accessibilityLabel("Edit Pantauan")
+            }
+        }
         .fullScreenCover(isPresented: $showEditSheet) {
             AddPantauan(pantauanToEdit: pantauan)
                 .interactiveDismissDisabled()

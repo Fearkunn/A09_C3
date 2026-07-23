@@ -8,98 +8,91 @@
 import SwiftUI
 
 struct KonsulDetailView: View {
-    @Environment(\.dismiss) private var dismiss
+    @Environment(\.dynamicTypeSize) var dynamicTypeSize
     let konsultasi: KonsulModel
     
     @State private var showEditSheet = false
     
-    @Environment(\.dynamicTypeSize) var dynamicTypeSize
-    
-    var dynamicLayout: AnyLayout{
+    var dynamicLayout: AnyLayout {
         dynamicTypeSize.isAccessibilitySize ? AnyLayout(VStackLayout(alignment: .leading)) : AnyLayout(HStackLayout(alignment: .top))
     }
     
     private var formattedDate: String {
         konsultasi.tanggalKonsultasi.formatted(
-            .dateTime
-                .day()
-                .month(.wide)
-                .year()
-                .locale(Locale(identifier: "id_ID"))
+            .dateTime.day().month(.wide).year().locale(Locale(identifier: "id_ID"))
         )
     }
     
+    func indonesianText(_ text: String) -> AttributedString {
+        var label = AttributedString(text)
+        label.setAttributes(
+            AttributeContainer([
+                .accessibilitySpeechLanguage: "id_ID"
+            ])
+        )
+        return label
+    }
+    
     var body: some View {
-        ZStack {
-            Color("backgroundColor")
-                .ignoresSafeArea()
-            
-            VStack(spacing: 16) {
-                HStack {
-                    CircleIconButton(
-                        systemName: "chevron.left",
-                        iconColor: .primary,
-                        backgroundColor: Color(.tertiarySystemFill),
-                        action: { dismiss() }
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                VStack(alignment: .leading, spacing: 12) {
+                    dynamicLayout {
+                        Text(konsultasi.namaDokter)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityLabel(
+                        Text(indonesianText("Nama dokter \(konsultasi.namaDokter)"))
                     )
-                    .accessibilityLabel("Tombol Kembali")
                     
-                    Spacer()
+                    Divider()
                     
-                    EditCircleButton(
-                        title: "Edit",
-                        textColor: .primary,
-                        backgroundColor: Color(.tertiarySystemFill),
-                        action: { showEditSheet = true }
-                    )
-                    .accessibilityLabel("Edit Konsultasi")
-                }
-                .padding(.horizontal, 20)
-                .padding(.top, 20)
-                
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 16) {
-                        VStack(alignment: .leading, spacing: 12) {
-                            dynamicLayout {
-                                Text(konsultasi.namaDokter)
-                            }
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            
-                            Divider()
-                            
-                            dynamicLayout{
-                                Text("Tanggal konsultasi")
-                                    .foregroundStyle(.secondary)
-                                if !dynamicTypeSize.isAccessibilitySize {
-                                    Spacer()
-                                }
-                                Text(formattedDate)
-                                
-                            }
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        }
-                        .padding()
-                        .background(Color(.secondarySystemGroupedBackground))
-                        .clipShape(RoundedRectangle(cornerRadius: 12))
-                        
-                        dynamicLayout{
-                            Text(konsultasi.content)
-                                .padding()
-                                .frame(maxWidth: .infinity, minHeight: 200, alignment: .topLeading)
-                                .background(Color(.secondarySystemGroupedBackground))
-                                .clipShape(RoundedRectangle(cornerRadius: 12))
-                            
+                    dynamicLayout {
+                        Text("Tanggal konsultasi")
+                            .foregroundStyle(.secondary)
+                        if !dynamicTypeSize.isAccessibilitySize {
                             Spacer()
                         }
-                        
+                        Text(formattedDate)
                     }
-                    .padding(.horizontal, 20)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityElement(children: .combine)
+                    .accessibilityLabel(
+                        Text(indonesianText("Tanggal konsultasi \(formattedDate)"))
+                    )
                 }
+                .padding()
+                .background(Color(.secondarySystemGroupedBackground))
+                .clipShape(RoundedRectangle(cornerRadius: 12))
                 
-                
+                dynamicLayout {
+                    Text(konsultasi.content)
+                        .padding()
+                        .frame(maxWidth: .infinity, minHeight: 200, alignment: .topLeading)
+                        .background(Color(.secondarySystemGroupedBackground))
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                        .accessibilityLabel(
+                            Text(indonesianText("Isi konsultasi \(konsultasi.content)"))
+                        )
+                }
+            }
+            .padding(.horizontal, 20)
+            .padding(.top, 16)
+        }
+        .background(Color("backgroundColor"))
+        .navigationTitle("Detail Konsultasi")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button("Edit") {
+                    showEditSheet = true
+                }
+                .foregroundStyle(.primary)
+                .accessibilityLabel(
+                    Text(indonesianText("Tombol Edit Konsultasi"))
+                )
             }
         }
-        .navigationBarHidden(true)
         .fullScreenCover(isPresented: $showEditSheet) {
             AddKonsul(konsultasiToEdit: konsultasi)
                 .interactiveDismissDisabled()
