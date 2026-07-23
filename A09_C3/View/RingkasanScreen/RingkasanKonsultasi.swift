@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct RingkasanKonsultasi {
+struct RingkasanKonsultasi: Codable {
     var ringkasan: String
     var poinPenting: [String]
 }
