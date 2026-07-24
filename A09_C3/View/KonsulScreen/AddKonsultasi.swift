@@ -68,16 +68,17 @@ struct AddKonsul: View {
                 
                 TextField(text: $namaDokter, prompt: Text("Nama Dokter")) {
                     Text("Nama")
-                        .accessibilityLabel(Text(indonesianText("Tuliskan nama dokter")))
+                        .accessibilityLabel("Tuliskan nama dokter")
                 }
                 if let errorMessageName {
                     Text(errorMessageName)
                         .font(.caption)
                         .foregroundStyle(.red)
-                        .accessibilityLabel(Text(indonesianText(errorMessageName)))
+                        .accessibilityLabel(errorMessageName)
                 }
                 ExpandableDatePicker(label: "Tanggal konsultasi", selection: $tanggalKonsultasi)
-                    .accessibilityLabel(Text(indonesianText("Tanggal konsultasi")))
+                    .accessibilityLabel("Tanggal konsultasi")
+
             }
             
             Section {
@@ -89,7 +90,7 @@ struct AddKonsul: View {
                             prompt: Text("Ketik atau ketuk ikon mikrofon untuk berbicara"),
                             axis: .vertical
                         )
-                        .accessibilityLabel(Text(indonesianText("Ketik disini untuk menulis konsultasi atau ketuk mikrofon")))
+                        .accessibilityLabel("Ketik disini untuk menulis konsultasi atau ketuk mikrofon")
                         .autocorrectionDisabled()
                         .lineLimit(8...100)
                         .padding(.trailing, 44)
@@ -100,7 +101,7 @@ struct AddKonsul: View {
                             onError: { message in errorMessage = message }
                         )
                         .padding(8)
-                        .accessibilityLabel(Text(indonesianText("Ketuk mikrofon dan mulai berbicara")))
+                        .accessibilityLabel("Ketuk mikrofon dan mulai berbicara")
                     }
                 }
                 
@@ -109,22 +110,21 @@ struct AddKonsul: View {
                     Text(errorMessage)
                         .font(.caption)
                         .foregroundStyle(.red)
-                        .accessibilityLabel(Text(indonesianText(errorMessage)))
+                        .accessibilityLabel(errorMessage)
                 }
             }
         }
-        
         .onAppear(perform: loadExistingData)
         .alert(cancelAlertTitle, isPresented: $showCancelAlert) {
             Group {
                 Button("Batalkan", role: .destructive) {
                     dismiss()
                 }
-                .accessibilityLabel(Text(indonesianText("Batalkan penambahan obat")))
-                .accessibilityHint(Text(indonesianText("Keluar tanpa menyimpan perubahan")))
+                .accessibilityLabel("Batalkan penambahan obat")
+                .accessibilityHint("Keluar tanpa menyimpan perubahan")
                 Button("Lanjutkan Mengedit", role: .cancel) {}
-                    .accessibilityLabel(Text(indonesianText("Lanjutkan mengedit")))
-                    .accessibilityHint(Text(indonesianText("Kembali pada halaman tanpa menghapus data")))
+                    .accessibilityLabel("Lanjutkan mengedit")
+                    .accessibilityHint("Kembali pada halaman tanpa menghapus data")
             }
             .tint(.black)
         } message: {

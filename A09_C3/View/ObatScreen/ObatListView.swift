@@ -48,8 +48,8 @@ struct ObatListView: View {
                         value: selectedTab
                     )
                     .padding(.horizontal)
-                    .accessibilityLabel(Text(indonesianText("Filter obat")))
-                    .accessibilityValue(Text(indonesianText(selectedTab.rawValue)))
+                    .accessibilityLabel("Filter obat")
+                    .accessibilityValue(selectedTab.rawValue)
                     Spacer()
                     
                     if filteredObat.isEmpty {
@@ -70,8 +70,8 @@ struct ObatListView: View {
                                             }
                                             .tint(.red)
                                             .accessibilityLabel(
-                                                Text(indonesianText("Hapus obat \(obat.nama)"))
-                                            )
+                                                "Hapus obat \(obat.nama)")
+                                            
                                         }
                                 }
                             }
@@ -93,7 +93,7 @@ struct ObatListView: View {
                 obatToDelete = nil
             }
                 .tint(.black)
-                .accessibilityLabel(Text(indonesianText("Batal, jangan hapus obat")))
+                .accessibilityLabel("Batal, jangan hapus obat")
 
             Button("Hapus", role: .destructive) {
                 if let obat = obatToDelete {
@@ -109,7 +109,7 @@ struct ObatListView: View {
                 }
             }
             .accessibilityLabel(
-                Text(indonesianText("Hapus obat \(obatToDelete?.nama ?? "")"))
+                Text("Hapus obat \(obatToDelete?.nama ?? "")")
             )
             
         } message: {

@@ -42,7 +42,7 @@ struct KonsulDetailView: View {
                         backgroundColor: Color(.tertiarySystemFill),
                         action: { dismiss() }
                     )
-                    .accessibilityLabel(Text(indonesianText("Tombol kembali")))
+                    .accessibilityLabel("Tombol kembali")
                     
                     Spacer()
                     
@@ -52,7 +52,7 @@ struct KonsulDetailView: View {
                         backgroundColor: Color(.tertiarySystemFill),
                         action: { showEditSheet = true }
                     )
-                    .accessibilityLabel(Text(indonesianText("Tombol Edit Konsultasi")))
+                    .accessibilityLabel("Tombol Edit Konsultasi")
                 }
                 .padding(.horizontal, 20)
                 .padding(.top, 20)
@@ -64,7 +64,7 @@ struct KonsulDetailView: View {
                                 Text(konsultasi.namaDokter)
                             }
                             .frame(maxWidth: .infinity, alignment: .leading)
-                            .accessibilityLabel(Text(indonesianText("Nama dokter \(konsultasi.namaDokter)")))
+                            .accessibilityLabel("Nama dokter \(konsultasi.namaDokter)")
                             
                             Divider()
                             
@@ -78,7 +78,7 @@ struct KonsulDetailView: View {
                             }
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .accessibilityElement(children: .combine)
-                            .accessibilityLabel(Text(indonesianText("Tanggal konsultasi \(formattedDate)")))
+                            .accessibilityLabel("Tanggal konsultasi \(formattedDate)")
                         }
                         .padding()
                         .background(Color(.secondarySystemGroupedBackground))
@@ -90,7 +90,7 @@ struct KonsulDetailView: View {
                                 .frame(maxWidth: .infinity, minHeight: 200, alignment: .topLeading)
                                 .background(Color(.secondarySystemGroupedBackground))
                                 .clipShape(RoundedRectangle(cornerRadius: 12))
-                                .accessibilityLabel(Text(indonesianText("Isi konsultasi \(konsultasi.content)")))
+                                .accessibilityLabel("Isi konsultasi \(konsultasi.content)")
                             Spacer()
                         }
                         

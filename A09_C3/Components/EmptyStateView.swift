@@ -16,12 +16,6 @@ struct EmptyStateView: View {
         dynamicTypeSize.isAccessibilitySize
     }
     
-    func indonesianText(_ text: String) -> AttributedString {
-        var label = AttributedString(text)
-        label.setAttributes(AttributeContainer([.accessibilitySpeechLanguage: "id_ID"]))
-        return label
-    }
-    
     var body: some View {
         VStack(spacing: 8) {
             Image(systemName: "pencil.and.list.clipboard")
@@ -32,7 +26,7 @@ struct EmptyStateView: View {
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
             
-            Text(indonesianText(message))
+            Text(message)
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
         }
@@ -40,7 +34,7 @@ struct EmptyStateView: View {
         .padding(.horizontal, 32)
         .frame(maxWidth: .infinity)
         .accessibilityElement(children: .combine)
-        .accessibilityLabel(Text(indonesianText(message)))
+        .accessibilityLabel(message)
     }
 }
 

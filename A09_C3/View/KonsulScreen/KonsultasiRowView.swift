@@ -34,9 +34,9 @@ struct KonsulRowView: View {
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(
-            Text(indonesianText("Konsultasi dengan \(konsul.namaDokter), tanggal \(formattedDate)"))
+            Text("Konsultasi dengan \(konsul.namaDokter), tanggal \(formattedDate)")
         )
-        .accessibilityHint(Text(indonesianText("Ketuk dua kali untuk melihat detail konsultasi")))
+        .accessibilityHint("Ketuk dua kali untuk melihat detail konsultasi")
         .accessibilityAddTraits(.isButton)
     }
 }

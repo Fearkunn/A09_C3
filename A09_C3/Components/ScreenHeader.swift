@@ -15,7 +15,7 @@ struct ScreenHeader: View {
 
     var body: some View {
         HStack {
-            Text(indonesianText(title))
+            Text(title)
                 .font(.largeTitle)
                 .fontWeight(.bold)
 
@@ -28,7 +28,7 @@ struct ScreenHeader: View {
                     .frame(width: 48, height: 48)
                     .background(Circle().fill(.cyan))
             }
-            .accessibilityLabel(Text(indonesianText(accessibilityActionLabel ?? "Tambah \(title)")))
+            .accessibilityLabel("Tambah \(title)")
         }
         .padding(.horizontal, 20)
     }
