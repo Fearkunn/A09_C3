@@ -72,7 +72,7 @@ struct KonsulListView: View {
                                         .font(.subheadline)
                                         .fontWeight(.semibold)
                                         .foregroundColor(.secondary)
-                                        .accessibilityLabel("Kelompok bulan \(group.key)")
+                                        .accessibilityLabel("Catatan Bulan \(group.key)")
                                         
                                 }
                             }
