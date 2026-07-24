@@ -51,7 +51,7 @@ struct AddKonsul: View {
     
     private var isSaveEnabled: Bool {
         guard konsultasiToEdit != nil else {
-            return !namaDokter.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+            return !namaDokter.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && !content.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
         }
         return hasUnsavedChanges
     }
