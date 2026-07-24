@@ -29,11 +29,11 @@ struct DictationButton: View {
             systemName: dictationManager.isRecording ? "stop.fill" : "mic.fill",
             iconColor: dictationManager.isRecording ? .white : .primary,
             backgroundColor: dictationManager.isRecording ? .red : Color(.tertiarySystemFill),
+            isProminent: dictationManager.isRecording,
             action: {
                 Task { await toggleDictation() }
             }
         )
-        .buttonStyle(.borderless)
         .accessibilityLabel(dictationManager.isRecording ? "Hentikan dikte" : "Mulai dikte")
         .onChange(of: dictationManager.transcribedText) { _, newValue in
             guard dictationManager.isRecording else { return }
