@@ -8,7 +8,7 @@
 import Foundation
 
 struct CachedPoin: Codable {
-    let sourceText: String   // teks catatan ASLI saat diringkas — dipakai deteksi perubahan/edit
+    let sourceText: String  
     let text: String
     let generatedAt: Date
 }
