@@ -64,13 +64,29 @@ final class ObatAddViewModel {
     var frekuensiText: String {
         "\(jumlahPerHari) kali sehari, \(jumlahPerKali) \(satuanJumlah)"
     }
+    
+    private static let allowedNameCharacters: CharacterSet = {
+            var allowed = CharacterSet.letters
+            allowed.formUnion(.decimalDigits)
+            allowed.formUnion(.whitespaces)
+            allowed.insert(charactersIn: "-/")
+            return allowed
+        }()
+    
 
     // MARK: - Validation
     // AC: User can save the Obat note only when all required information has been provided
+    
+    var isValidMedicineName: Bool {
+            nama.isEmpty || nama.unicodeScalars.allSatisfy { Self.allowedNameCharacters.contains($0) }
+        }
+    
+    
     var isFormValid: Bool {
         let trimmedDosis = dosis.trimmingCharacters(in: .whitespaces)
 
         let baseValid = !nama.trimmingCharacters(in: .whitespaces).isEmpty
+            && isValidMedicineName
             && !trimmedDosis.isEmpty
             && (Int(trimmedDosis) ?? 0) > 0
             && jumlahPerHari > 0
