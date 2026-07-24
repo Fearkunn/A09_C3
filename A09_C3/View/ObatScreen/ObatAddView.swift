@@ -68,9 +68,9 @@ struct ObatAddView: View {
                     .tint(.secondary)
                 }
                 .accessibilityElement(children: .ignore)
-                .accessibilityLabel(Text(indonesianText("Jenis obat")))
-                .accessibilityValue(Text(indonesianText(viewModel.jenis.rawValue)))
-                .accessibilityHint(Text(indonesianText("Ketuk dua kali untuk memilih jenis obat")))
+                .accessibilityLabel(Text("Jenis obat"))
+                .accessibilityValue(Text(viewModel.jenis.rawValue))
+                .accessibilityHint("Ketuk dua kali untuk memilih jenis obat")
                 
                 PickerSection(viewModel: viewModel)
                 
@@ -84,8 +84,8 @@ struct ObatAddView: View {
                             }
                             .multilineTextAlignment(.trailing)
                             .foregroundStyle(.secondary)
-                            .accessibilityLabel(Text(indonesianText("Dosis obat")))
-                            .accessibilityValue(Text(indonesianText("\(viewModel.dosis) \(viewModel.satuanDosis)")))
+                            .accessibilityLabel("Dosis obat")
+                            .accessibilityValue("\(viewModel.dosis) \(viewModel.satuanDosis)")
                         
                         Text(viewModel.satuanDosis)
                             .foregroundStyle(.secondary)
@@ -108,8 +108,8 @@ struct ObatAddView: View {
                     reduceMotion ? nil : .default,
                     value: selectedTab
                 )
-                .accessibilityLabel(Text(indonesianText("Keterangan")))
-                .accessibilityValue(Text(indonesianText(viewModel.keterangan.rawValue)))
+                .accessibilityLabel("Keterangan")
+                .accessibilityValue(viewModel.keterangan.rawValue)
                 
                 VStack(alignment: .leading, spacing: 15) {
                     Text("Waktu Minum")
@@ -126,20 +126,20 @@ struct ObatAddView: View {
                         reduceMotion ? nil : .default,
                         value: viewModel.jenisJadwal
                     )
-                    .accessibilityLabel(Text(indonesianText("Jenis jadwal minum obat")))
+                    .accessibilityLabel("Jenis jadwal minum obat")
 
                 }
 
                 // AC: If Kondisional dipilih, user bisa isi detail kondisi
                 if viewModel.isKondisional {
                     TextField("Detail kondisi (cth: saat demam)", text: $viewModel.kondisiDetail)
-                        .accessibilityLabel(Text(indonesianText("Detail kondisi obat kondisional. Contoh: saat demam")))
+                        .accessibilityLabel("Detail kondisi obat kondisional. Contoh: saat demam")
 
                     if viewModel.attemptedSave && viewModel.kondisiDetail.trimmingCharacters(in: .whitespaces).isEmpty {
                         Text("Detail kondisi wajib diisi")
                             .font(.caption)
                             .foregroundStyle(.red)
-                            .accessibilityLabel(Text(indonesianText("Detail kondisi wajib diisi")))
+                            .accessibilityLabel("Detail kondisi wajib diisi")
                     }
                 }
             }
@@ -148,12 +148,12 @@ struct ObatAddView: View {
             Button("Batalkan", role: .destructive) {
                 dismiss()
             }
-            .accessibilityLabel(Text(indonesianText("Batalkan penambahan obat")))
-            .accessibilityHint(Text(indonesianText("Keluar tanpa menyimpan perubahan")))
+            .accessibilityLabel("Batalkan penambahan obat")
+            .accessibilityHint("Keluar tanpa menyimpan perubahan")
             Button("Lanjutkan Mengedit", role: .cancel) {}
                 .tint(.black)
-                .accessibilityLabel(Text(indonesianText("Lanjutkan mengedit")))
-                .accessibilityHint(Text(indonesianText("Kembali pada halaman tanpa menghapus data")))
+                .accessibilityLabel("Lanjutkan mengedit")
+                .accessibilityHint("Kembali pada halaman tanpa menghapus data")
         } message: {
             Text("Jika Anda keluar sekarang, informasi obat yang telah diisi tidak akan disimpan.")
         }

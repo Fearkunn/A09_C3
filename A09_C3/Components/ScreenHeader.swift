@@ -15,7 +15,7 @@ struct ScreenHeader: View {
 
     var body: some View {
         HStack {
-            Text(indonesianText(title))
+            Text(title)
                 .font(.largeTitle)
                 .fontWeight(.bold)
 

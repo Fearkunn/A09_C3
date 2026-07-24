@@ -191,11 +191,12 @@
 				};
 			};
 			buildConfigurationList = 13150B44300635550096FDB2 /* Build configuration list for PBXProject "A09_C3" */;
-			developmentRegion = en;
+			developmentRegion = id;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
+				id,
 			);
 			mainGroup = 13150B40300635550096FDB2;
 			minimizedProjectReferenceProxies = 1;
@@ -285,6 +286,9 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = A09_C3/Info.plist;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Aplikasi membutuhkan akses mikrofon untuk fitur dikte";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Aplikasi membutuhkan akses pengenalan suara untuk fitur dikte";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -324,6 +328,9 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = A09_C3/Info.plist;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Aplikasi membutuhkan akses mikrofon untuk fitur dikte";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Aplikasi membutuhkan akses pengenalan suara untuk fitur dikte";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
