@@ -43,9 +43,9 @@ struct ObatAddView: View {
         ) {
             Section {
                 TextField("Tambahkan Nama Obat", text: $viewModel.nama)
-                    .accessibilityLabel("Tulis nama obat disini")
-                if viewModel.attemptedSave && viewModel.nama.trimmingCharacters(in: .whitespaces).isEmpty {
-                    Text("Nama obat wajib diisi")
+                    .accessibilityLabel(Text(indonesianText("Tulis nama obat disini")))
+                if !viewModel.isValidMedicineName {
+                    Text("Nama obat tidak boleh mengandung simbol atau karakter khusus")
                         .font(.caption)
                         .foregroundStyle(.red)
                 }

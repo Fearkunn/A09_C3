@@ -34,9 +34,10 @@ struct AddModal<Content: View>: View {
 
                 CircleIconButton(
                     systemName: "checkmark",
-                    iconColor: .primary,
+                    iconColor: .white,
                     backgroundColor: .cyan,
                     isEnabled: isSaveEnabled,
+                    isProminent: true,
                     action: onSave
                 )
             }

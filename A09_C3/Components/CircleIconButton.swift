@@ -11,21 +11,43 @@ struct CircleIconButton: View {
     let systemName: String
     let iconColor: Color
     let backgroundColor: Color
-    var size: CGFloat = 50
-    var iconSize: CGFloat = 24
+    var size: CGFloat = 45
+    var iconSize: CGFloat = 20
     var isEnabled: Bool = true
+    var isProminent: Bool = false
     let action: () -> Void
+    
+    private var foregroundColor: Color {
+        isEnabled ? iconColor : .secondary
+    }
+    
+    private var tintColor: Color {
+        guard isEnabled else {
+            return .gray.opacity(0.12)
+        }
+
+        if isProminent {
+            return backgroundColor
+        }
+
+        return Color.white.opacity(0.01)
+    }
     
     var body: some View {
         Button(action: action) {
             Image(systemName: systemName)
                 .font(.system(size: iconSize))
-                .foregroundColor(isEnabled ? iconColor : .secondary)
+                .foregroundStyle(foregroundColor)
                 .frame(width: size, height: size)
-                .background(
-                    Circle().fill(isEnabled ? backgroundColor : Color.gray.opacity(0.16))
+                .contentShape(Circle())
+                .glassEffect(
+                    .regular
+                        .tint(tintColor)
+                        .interactive(isEnabled),
+                    in: Circle()
                 )
         }
+        .buttonStyle(.plain)
         .disabled(!isEnabled)
     }
 }
@@ -43,13 +65,15 @@ struct CircleIconButton: View {
             iconColor: .primary,
             backgroundColor: .cyan,
             isEnabled: false,
+            isProminent: true,
             action: {}
         )
         CircleIconButton(
             systemName: "checkmark",
-            iconColor: .primary,
+            iconColor: .white,
             backgroundColor: .cyan,
             isEnabled: true,
+            isProminent: true,
             action: {}
         )
     }

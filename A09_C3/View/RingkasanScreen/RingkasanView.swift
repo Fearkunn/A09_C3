@@ -11,65 +11,92 @@ import SwiftData
 struct RingkasanView: View {
     @Environment(TranslationBridge.self) private var translationBridge
     @State private var viewModel: RingkasanViewModel?
-    
+
     @Query(sort: \PantauanModel.pantauanDate, order: .reverse)
     private var pantauanList: [PantauanModel]
-    
+
     @Query(sort: \KonsulModel.tanggalKonsultasi, order: .reverse)
     private var konsulList: [KonsulModel]
-    
+
+    private var isDataKosong: Bool {
+        pantauanList.isEmpty && konsulList.isEmpty
+    }
+
     var body: some View {
-        VStack(spacing: 16) {
-            ScreenHeader(title: "Ringkasan", icon : "square.and.arrow.up") {
-            }
-            Group {
-                if let viewModel {
-                    ScrollView {
-                        VStack(spacing: 16) {
-                            if !viewModel.isModelAvailable {
-                                Text("Apple Intelligence belum aktif di perangkat ini. Aktifkan lewat Settings untuk memakai fitur ringkasan.")
-                                    .font(.caption)
-                                    .foregroundStyle(.orange)
-                                    .padding()
-                            }
+        NavigationStack {
+            ZStack {
+                Color("backgroundColor")
+                    .ignoresSafeArea()
 
-                            RingkasanPantauanCard(
-                                ringkasan: viewModel.ringkasanPantauan,
-                                isGenerating: viewModel.isGeneratingPantauan,
-                                error: viewModel.errorPantauan
-                            )
+                VStack(spacing: 16) {
+                    ScreenHeader(title: "Ringkasan", icon: "square.and.arrow.up") {
+                    }
+                    Spacer()
+                }
 
-                            RingkasanKonsultasiCard(
-                                ringkasan: viewModel.ringkasanKonsultasi,
-                                isGenerating: viewModel.isGeneratingKonsultasi,
-                                error: viewModel.errorKonsultasi
-                            )
-                        }
-                        .padding()
-                    }
-                    .refreshable {
-                        await viewModel.generateSemuaRingkasan(
-                            pantauanList: pantauanList,
-                            konsulList: konsulList
-                        )
-                    }
+                if isDataKosong {
+                    EmptyStateView(message: "Tambahkan Pantauan atau Konsultasi untuk melihat Ringkasan")
                 } else {
-                    ProgressView()
+                    VStack(spacing: 0) {
+                        Spacer().frame(height: 100)
+
+                        Group {
+                            if let viewModel {
+                                ScrollView {
+                                    VStack(spacing: 16) {
+                                        if !viewModel.isModelAvailable {
+                                            Text("Apple Intelligence belum aktif di perangkat ini. Aktifkan melalui Settings untuk memakai fitur ringkasan.")
+                                                .font(.caption)
+                                                .foregroundStyle(.secondary)
+                                                .padding()
+                                        }
+
+                                        if !pantauanList.isEmpty {
+                                            RingkasanSectionView(
+                                                title: "Pantauan",
+                                                lastUpdated: viewModel.lastUpdatedPantauan,
+                                                poinPenting: viewModel.poinPantauan,
+                                                isGenerating: viewModel.isGeneratingPantauan,
+                                                error: viewModel.errorPantauan
+                                            )
+                                        }
+
+                                        if !konsulList.isEmpty {
+                                            RingkasanSectionView(
+                                                title: "Konsultasi",
+                                                lastUpdated: viewModel.lastUpdatedKonsultasi,
+                                                poinPenting: viewModel.poinKonsultasi,
+                                                isGenerating: viewModel.isGeneratingKonsultasi,
+                                                error: viewModel.errorKonsultasi
+                                            )
+                                        }
+
+                                        Text("Informasi yang dirangkum AI dapat mengandung kesalahan atau ketidakakuratan. Selalu periksa kembali informasi penting dan ikuti arahan tenaga kesehatan.")
+                                            .font(.caption)
+                                            .foregroundStyle(.secondary)
+                                    }
+                                    .padding(.horizontal, 20)
+                                }
+                                .refreshable {
+                                    await viewModel.generateSemuaRingkasan(
+                                        pantauanList: pantauanList,
+                                        konsulList: konsulList
+                                    )
+                                }                            } else {
+                                ProgressView()
+                            }
+                        }
+                    }
                 }
             }
+            .navigationBarHidden(true)
         }
         .onAppear {
             if viewModel == nil {
                 let service = RingkasanService(translationBridge: translationBridge)
                 let newViewModel = RingkasanViewModel(service: service)
                 viewModel = newViewModel
-
-                Task {
-                    await newViewModel.generateSemuaRingkasan(
-                        pantauanList: pantauanList,
-                        konsulList: konsulList
-                    )
-                }
+                newViewModel.loadCachedDisplay(pantauanList: pantauanList, konsulList: konsulList)
             }
         }
     }

@@ -21,14 +21,16 @@ struct ScreenHeader: View {
 
             Spacer()
 
-            Button(action: addAction) {
-                Image(systemName: icon)
-                    .font(.system(size: 22, weight: .bold))
-                    .foregroundColor(.primary)
-                    .frame(width: 48, height: 48)
-                    .background(Circle().fill(.cyan))
-            }
-            .accessibilityLabel("Tambah \(title)")
+            CircleIconButton(
+                systemName: icon,
+                iconColor: .white,
+                backgroundColor: .cyan,
+                size: 48,
+                iconSize: 22,
+                isProminent: true,
+                action: addAction
+            )
+            .accessibilityLabel(Text(indonesianText(accessibilityActionLabel ?? "Tambah \(title)")))
         }
         .padding(.horizontal, 20)
     }
